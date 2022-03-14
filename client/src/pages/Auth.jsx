@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Button, Paper, Grid, Typography, Link, Snackbar, IconButton } from '@mui/material'
+import { Button, Paper, Grid, Typography, Link, Snackbar, IconButton, Stack } from '@mui/material'
 import FeatherIcon from 'feather-icons-react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../services/axios'
 
 import Input from '../components/Auth/Input'
+import Loader from '../components/Loader'
 
 export default function Auth() {
 	let navigate = useNavigate()
@@ -18,53 +19,59 @@ export default function Auth() {
 	const [repeatPassword, setRepeatPassword] = useState('')
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
+	const {user, setUser } = useContext(UserContext);
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
+		setLoader(true)
 		if (isSignUp) {
-			if ((username === '' || password === '', repeatPassword === '', name === '', email === '')) {
+			if ((password === '', repeatPassword === '', name === '', email === '')) {
+				setLoader(false)
 				setOpen(true)
 				setError('Fill all the details')
 			} else if (password !== repeatPassword) {
+				setLoader(false)
 				setOpen(true)
 				setError("Password don't match")
 			}
-
-			axios()
-				.post('/auth/register', {
-					username: username,
-					name: name,
-					email: email,
-					password: password,
-				})
-				.then((res) => {
-					if (res.status === 200) {
-						navigate('/dash')
-					} else {
+			else{
+				axios()
+					.post('/register', {
+						name: name,
+						email: email,
+						password: password,
+					})
+					.then((res) => {
+						setLoader(false)
+						setLoader(false)
+						navigate('/home')
+					})
+					.catch((error)=>{
+						setLoader(false)
 						setOpen(true)
-						setError(res.body)
-					}
-				})
+						setError(error.response.data)
+					})
+			}
 		} else {
-			if (username === '' || password === '') {
+			if (email === '' || password === '') {
 				setOpen(true)
 				setError('Fill all the details')
-			}
-
-			axios()
-				.post('/auth/login', {
-					username: username,
-					password: password,
-				})
-				.then((res) => {
-					if (res.data === 'Logged In') {
-						window.localStorage.setItem('username', username)
-						navigate('/dash')
-					} else {
+			}else{
+				axios()
+					.post('/auth', {
+						email: email,
+						password: password,
+					})
+					.then((res) => {
+						setLoader(false)
+						navigate('/home')
+					})
+					.catch((error)=>{
+						setLoader(false)
 						setOpen(true)
-						setError(res.data)
-					}
-				})
+						setError(error.response.data)
+					})
+				}
 		}
 	}
 
@@ -79,7 +86,7 @@ export default function Auth() {
 		<Grid container alignItems='center' justifyContent='center' sx={{ height: '100vh' }}>
 			<Snackbar
 				open={open}
-				autoHideDuration={6000}
+				autoHideDuration={3000}
 				onClose={handleClose}
 				message={error}
 				action={
@@ -117,26 +124,20 @@ export default function Auth() {
 								<>
 									<Input
 										name='Name'
-										label='First Name'
+										label='Full Name'
 										handleChange={(event) => setName(event.target.value)}
 										value={name}
 										half
 										autoFocus={true}
 									/>
-									<Input
-										name='email'
-										label='Email Address'
-										handleChange={(event) => setEmail(event.target.value)}
-										value={email}
-										type='email'
-									/>
 								</>
 							)}
 							<Input
-								name='username'
-								label='Username'
-								handleChange={(event) => setUsername(event.target.value)}
-								value={username}
+								name='email'
+								label='Email Address'
+								handleChange={(event) => setEmail(event.target.value)}
+								value={email}
+								type='email'
 							/>
 							<Input
 								name='password'
@@ -156,7 +157,10 @@ export default function Auth() {
 							)}
 
 							<Button sx={{ mt: 4 }} type='submit' variant='contained' color='primary'>
-								{isSignUp ? 'Sign Up' : 'Sign In'}
+								<Stack direction='row' alignItems='center' gap={1}>
+									{isSignUp ? 'Sign Up' : 'Sign In'}
+									{loader && <Loader size={16} />}
+								</Stack>
 							</Button>
 						</Grid>
 					</form>

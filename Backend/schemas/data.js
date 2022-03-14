@@ -8,7 +8,6 @@ const registerschema = new schema({
     name: {
         type: String,
         required: true
-        
     },
     email: {
         type: String,
@@ -23,9 +22,6 @@ const registerschema = new schema({
         minlength: 5,
         maxlength: 300
     }
-
-
-
 })
 
 const unischema = new schema({
@@ -51,10 +47,6 @@ const unischema = new schema({
     Cutoff_Round_One: Number,
     Cutoff_Round_Two: Number,
     Images: String
-
-    
-
-
 })
 
 const user = mongoose.model('user', registerschema);

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URI = 'http://localhost:9000'
+const BASE_URI = 'http://localhost:8000'
 
 export default () => {
 	return axios.create({
