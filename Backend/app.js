@@ -1,3 +1,9 @@
+if (process.env.NODE_ENV !== 'production')
+{
+    require('dotenv').config();
+    }
+
+
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const express = require('express');
@@ -24,8 +30,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 const mongoose = require('mongoose');
+const dbUrl= process.env.DB_URL
 
-mongoose.connect('mongodb://localhost:27017/universities',
+//mongodb://localhost:27017/universities
+mongoose.connect(dbUrl,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
