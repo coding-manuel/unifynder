@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Auth from './pages/Auth'
 import Feed from './pages/Feed'
 import Admin from './pages/Admin'
+import Homepage from './pages/Homepage.jsx'
 const App = () => {
 	return (
 		<div className='App'>
@@ -12,6 +13,7 @@ const App = () => {
 				<Route path='auth' element={<Auth />} />
 				<Route path='dash' element={<Dashboard />} />
 				<Route path='feed' element={<Feed />} />
+				<Route path='home' element={<Homepage />} />
 				<Route path='admin' element={<Admin />} />
 			</Routes>
 		</div>
