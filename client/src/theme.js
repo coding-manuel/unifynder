@@ -26,6 +26,65 @@ export const theme = createTheme({
 		},
 	},
 	components: {
+		MuiAccordion:{
+			defaultProps:{
+				expanded: true,
+			},
+			styleOverrides:{
+				root:{
+					background: 'transparent',
+					backgroundImage: 'none',
+					'&.Mui-expanded':{
+						margin: 0
+					}
+				}
+			}
+		},
+		MuiAccordionSummary :{
+			styleOverrides:{
+				root:{
+					'&.Mui-expanded':{
+						minHeight: 0
+					}
+				},
+				content:{
+					'&.Mui-expanded':{
+						margin: '12px 0'
+					}
+				}
+			}
+		},
+		MuiAccordionDetails:{
+			styleOverrides:{
+				root:{
+					padding: '8px 16pxs',
+				}
+			}
+		},
+		MuiCheckbox:{
+			styleOverrides:{
+				root:{
+					padding:'2px 12px 2px 2px'
+				}
+			}
+		},
+		MuiFormControlLabel:{
+			styleOverrides:{
+				root:{
+					marginLeft: 0
+				}
+			}
+		},
+		MuiToolbar:{
+			styleOverrides:{
+				root:{
+					padding: '0 8px !important',
+					'@media (min-width: 600px)': {
+						padding: '0 16px'
+					  }
+				}
+			}
+		},
 		MuiButtonBase: {
 			defaultProps: {
 				disableRipple: true,
@@ -34,10 +93,10 @@ export const theme = createTheme({
 		MuiIconButton: {
 			styleOverrides: {
 				root: {
-					borderRadius: 12,
+					borderRadius: 6,
 					border: 'thin rgba(255, 255, 255, 0.12) solid',
 					marginLeft: 0,
-					padding: 12,
+					padding: 6,
 				},
 			},
 			variants: [
@@ -136,9 +195,12 @@ export const theme = createTheme({
 		},
 	},
 	typography: {
-		fontFamily: '"Open Sans", "Helvetica", "Arial", sans-serif',
+		fontFamily: 'Sora, sans-serif',
 		h5: {
 			fontWeight: 600,
 		},
+		subtitle1:{
+			fontWeight: 700,
+		}
 	},
 })
