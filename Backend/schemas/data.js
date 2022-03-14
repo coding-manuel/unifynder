@@ -28,6 +28,32 @@ const registerschema = new schema({
 
 })
 
+const unischema = new schema({
+    College_Name: String,
+    Genders_Accepted: String,
+    Campus_Size: Number,
+    Total_Students: Number,
+    Total_Faculty: Number,
+    Established_Year: Number,
+    Rating: Number,
+    University: String,
+    Courses: [{
+        type: String
+    }],
+    Facilities: [{
+        type: String
+    }],
+    City: String,
+    State: String,
+    Country: String,
+    College_Type: String,
+    Average_Fees: Number
+
+    
+
+
+})
+
 const user = mongoose.model('user', registerschema);
 
 function validateUser(User) {
@@ -38,6 +64,10 @@ function validateUser(User) {
     };
     return Schema.validate(User);
 }
+const uni = mongoose.model('uni', unischema);
+
 
 exports.user = user;
 exports.validate = validateUser;
+exports.uni = uni;
+
