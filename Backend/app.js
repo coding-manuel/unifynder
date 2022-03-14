@@ -98,6 +98,40 @@ app.post('/api/auth', async (req, res) => {
     res.send(true);
 });
 
+app.post('/wishlist', async function (req, res) {
+    const { wishlist } = req.body
+    const { name, username } = req.body
+    let User = await user.findOne({ email: req.body.email });
+    User.wishlist = wishlist
+    User.save();
+        res.send("wishlist updated");
+
+
+
+})
+
+//this route has issues
+app.get('/wishlist/:id', function (req, res) {
+    const id  = req.params.id;
+    const User = user.findOne({ email: req.params.id });
+    let college = User.wishlist;
+    let coll = uni.findOne({ _id: college })
+    res.send(coll.College_Name)
+    res.send("hello")
+
+})
+
+
+
+
+app.get('/register', function (req, res) {
+
+    res.render('register.ejs');
+
+
+})
+
+
 app.listen(port, function (req, res) {
     console.log(`app listening on port ${port}`);
 })
