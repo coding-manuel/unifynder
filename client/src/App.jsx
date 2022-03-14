@@ -6,6 +6,8 @@ import Auth from './pages/Auth'
 import Feed from './pages/Feed'
 import Admin from './pages/Admin'
 import Search from './pages/Search'
+import Profile from './pages/Profile'
+import Watchlist from './pages/Watchlist'
 
 import Homepage from './pages/Homepage.jsx'
 const App = () => {
@@ -17,6 +19,8 @@ const App = () => {
 				<Route path='feed' element={<Feed />} />
 				<Route path='search' element={<Search />} />
 				<Route path='home' element={<Homepage />} />
+				<Route path='watchlist' element={<Watchlist />} />
+				<Route path='profile' element={<Profile />} />
 				<Route path='admin' element={<Admin />} />
 			</Routes>
 		</div>

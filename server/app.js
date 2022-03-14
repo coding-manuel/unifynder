@@ -28,7 +28,7 @@ mongoose.connect('mongodb://localhost:27017/universities',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
-        
+
     });
 
     const db = mongoose.connection;
@@ -96,16 +96,12 @@ app.post('/auth', async (req, res) => {
     res.send(true);
 });
 
- 
-
-
 app.get('/register', function (req, res) {
-    
+
     res.render('register.ejs');
 
 
 })
-
 
 app.listen(port, function (req, res) {
     console.log("app listening on port 3000");

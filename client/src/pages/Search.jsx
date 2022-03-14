@@ -1,13 +1,16 @@
 import React, {useState} from 'react'
-import {AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Grid} from '@mui/material'
+import {AppBar, Box, Divider, Drawer, IconButton, Toolbar, Typography, Grid, Select, InputLabel, FormControl, Stack, MenuItem, FormGroup, Switch, FormControlLabel} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import FeatherIcon from 'feather-icons-react'
+import {Link} from 'react-router-dom'
 
 import Layout from '../layout/Layout'
 import Container from '@mui/material/Container'
 import Logo from '../components/Logo/Logo'
 import FilterAccordion from '../components/Filter/FilterAccordion'
 import UniversityCard from '../components/Filter/UniversityCard'
+import {collegeData} from "../sample"
+import Navbar from '../components/Navbar/Navbar'
 
 const categories = {
   "City":[
@@ -70,6 +73,12 @@ export default function Search() {
     setMobileOpen(!mobileOpen)
   }
 
+  const [sort, setSort] = React.useState('');
+
+  const handleSortChange = (event) => {
+    setSort(event.target.value);
+  };
+
   const showFilteredResults = () =>{
 
   }
@@ -88,11 +97,12 @@ export default function Search() {
       <Toolbar sx={{padding: '0 2px'}}>
         <Logo/>
 			</Toolbar>
+      <Divider />
       {Object.entries(categories).map((value) => {
           return (
             <>
-              <Divider />
               <FilterAccordion categories={value} handleFilters={filters =>handleFilters(filters, "City") }/>
+              <Divider />
             </>
           )
       })}
@@ -100,16 +110,18 @@ export default function Search() {
   );
 
   return (
-    <Layout>
+    <>
+    <Navbar />
       <Box sx={{ display: 'flex' }}>
         <AppBar
           position="fixed"
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
+            backgroundColor: '#1F1F1F'
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{padding: '0px 16px !important'}}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -119,9 +131,17 @@ export default function Search() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Responsive drawer
-            </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Search Colleges
+          </Typography>
+            <Stack direction='row' alignItems='center' justifyContent='flex-end' gap={2}>
+              <IconButton component={Link} to="/watchlist" aria-label="WatchList">
+                <FeatherIcon icon='bookmark' />
+              </IconButton>
+              <IconButton component={Link} to="/profile" aria-label="Profile">
+                <FeatherIcon icon='user' />
+              </IconButton>
+            </Stack>
           </Toolbar>
         </AppBar>
         <Box
@@ -159,13 +179,35 @@ export default function Search() {
           component="main"
           sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
         >
-          <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-            {Array.from(Array(6)).map((_, index) => (
-              <UniversityCard />
-            ))}
+          <Stack pb={2} direction='row' alignItems='center' justifyContent='space-between' gap={2}>
+            <FormGroup>
+              <FormControlLabel control={<Switch defaultChecked />} label="Am I eligible?" />
+            </FormGroup>
+            <FormControl fullWidth sx={{maxWidth: 200, fontSize: '12px'}}>
+              <InputLabel sx={{fontSize: '12px'}} id="demo-simple-select-label">Sort by</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={sort}
+                label="Sort by"
+                onChange={handleSortChange}
+                sx={{fontSize: '12px'}}
+              >
+                <MenuItem value={1}>Average Fees: High to Low</MenuItem>
+                <MenuItem value={2}>Average Fees: Low to High</MenuItem>
+                <MenuItem value={3}>Rating</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack>
+          <Grid justifyContent='center' container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+            {collegeData.map(value =>{
+              return(
+                <UniversityCard collegeInfo={value}/>
+              )
+            }) }
           </Grid>
         </Box>
       </Box>
-    </Layout>
+    </>
   )
 }

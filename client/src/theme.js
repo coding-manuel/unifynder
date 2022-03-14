@@ -27,12 +27,10 @@ export const theme = createTheme({
 	},
 	components: {
 		MuiAccordion:{
-			defaultProps:{
-				expanded: true,
-			},
 			styleOverrides:{
 				root:{
 					background: 'transparent',
+					boxShadow: 'none',
 					backgroundImage: 'none',
 					'&.Mui-expanded':{
 						margin: 0
@@ -86,6 +84,16 @@ export const theme = createTheme({
 			}
 		},
 		MuiButtonBase: {
+			defaultProps: {
+				disableRipple: true,
+			},
+			styleOverrides:{
+				root:{
+					textTransform: 'unset !important'
+				}
+			}
+		},
+		MuiButtonGroup:{
 			defaultProps: {
 				disableRipple: true,
 			},
@@ -171,18 +179,25 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: {
 					fontWeight: 500,
-					borderRadius: 8,
+					borderRadius: 4,
+					borderWidth: '2px',
 					transition: 'all 2000 ease-out',
 					'&:hover': {
 						background: 'grey[100]',
 					},
 				},
+				input:{
+					borderWidth: '2px',
+				}
 			},
 		},
 		MuiAppBar: {
 			styleOverrides: {
 				root: {
-					borderTop: 'thin rgba(255, 255, 255, 0.12) solid',
+					borderBottom: 'thin rgba(255, 255, 255, 0.12) solid',
+					backgroundColor: '#1F1F1F',
+					backgroundImage: 'unset',
+					boxShadow: 'none'
 				},
 			},
 		},

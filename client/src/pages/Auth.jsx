@@ -96,7 +96,7 @@ export default function Auth() {
 				}
 			/>
 			<Grid item>
-				<Paper sx={{ p: 4 }}>
+				<Paper sx={{ py: 4, px: 6}}>
 					<form autoComplete='off' noValidate onSubmit={handleSubmit}>
 						<Grid
 							container
@@ -107,7 +107,7 @@ export default function Auth() {
 						>
 							<Grid item xs={12}>
 								<Typography variant='h5' align='center'>
-									{isSignUp ? 'Sign Up' : 'Sign In'}
+									{isSignUp ? 'Sign Up' : 'Welcome Back!'}
 								</Typography>
 							</Grid>
 							<Grid item>
@@ -143,7 +143,7 @@ export default function Auth() {
 								label='Password'
 								handleChange={(event) => setPassword(event.target.value)}
 								value={password}
-								type='passoword'
+								type='password'
 							/>
 							{isSignUp && (
 								<Input

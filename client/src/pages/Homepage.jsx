@@ -1,164 +1,91 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Button, Typography, Container } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
-import Box from '@mui/material/Box';
+import { Grid, Button, Typography, InputAdornment, FormControl, Stack } from '@mui/material'
+import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField';
-import ButtonGroup from '@mui/material/ButtonGroup';
-// import ArrowCircleDownIcon from '@mui/icons/ArrowCircleDown';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
 import MediaCard from '../components/Mediacards';
 import SendIcon from '@mui/icons-material/Send';
+import FeatherIcon from 'feather-icons-react'
 
 import axios from '../services/axios'
 
-import Navbar from '../components/Navbar/Navbar'
-import HackathonCard from '../components/Dashboard/HackathonCard'
+import Layout from '../layout/Layout'
 
 const Homepage = () => {
-	// const [allHackathon, setAllHackathon] = useState([])
-	const [enrolledHackathon, setEnrolledHackathon] = useState([])
-	const [username, setUsername] = useState(localStorage.getItem('username'))
+	const [search, setSearch] = useState('');
 
-	useEffect(() => {
-		axios()
-			.post('/hackathon/getall')
-			.then((res) => setAllHackathon(res.data))
-
-		axios()
-			.post('/hackathon/getuser', { username: username })
-			.then((res) => setEnrolledHackathon(res.data[0].hackathon))
-	}, [])
 	const options = ['Courses', 'Colleges', 'State','State'];
-	const [open, setOpen] = React.useState(false);
-	const anchorRef = React.useRef(null);
-	const [selectedIndex, setSelectedIndex] = React.useState(1);
-  
-	const handleClick = () => {
-	  console.info(`You clicked ${options[selectedIndex]}`);
-	};
-  
-	const handleMenuItemClick = (event, index) => {
-	  setSelectedIndex(index);
-	  setOpen(false);
-	};
-  
-	const handleToggle = () => {
-	  setOpen((prevOpen) => !prevOpen);
-	};
-  
-	const handleClose = (event) => {
-	  if (anchorRef.current && anchorRef.current.contains(event.target)) {
-		return;
-	  }
-  
-	  setOpen(false);
-	};
-  
 
-  
+	const submitHandler = () =>{
+		console.log("chiekn")
+	}
+
 	return (
-		<>
-			<Navbar />
-			<Container maxWidth='lg'>
-				<Grid container spacing={2} direction='column' justify='space-evenly'>
-					<Grid item xs={12} alignItems='center' >
-						<Grid item>
-						<Box
-      component="form"
-      sx={{
-        '& > :not(style)': { my: 4, width: '120ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-      <TextField id="outlined-basic" label="search" variant="outlined" />
-    
-    </Box>
-
-
-	  
-						</Grid>
-					<Grid sx={{my:2}}>	
+		<Layout>
+			<Grid container spacing={2} direction='column' justifyContent='center' alignItems='center'>
+				<FormControl sx={{mx: 4, mt:4, mb:2, width: '90%'}} onSubmit={() => submitHandler()}>
+					<TextField
+					id="Search"
+					label="Search Colleges, Courses or location"
+					fullWidth
+					value={search}
+					InputProps={{
+						startAdornment: (
+						<InputAdornment position="start">
+							<FeatherIcon icon='search' size='20'/>
+						</InputAdornment>
+						),
+					}}
+					onChange={(event) => setSearch(event.target.value)}
+					/>
+				</FormControl>
+				<Stack sx={{mx: 4, my:2, width: '80%'}}>
+					<Stack justifyContent='space-between' alignItems='center' direction='row' sx={{width: '100%', mb: 2}}>
 						<Typography variant='h5'>
 							Explore Colleges
 						</Typography>
-				
-
-					</Grid>
-					<Button variant="contained" endIcon={<SendIcon />}>
-        see more
-      </Button>
-					<Grid sx={{my:2}} item container justifyContent='space-evenly'>
+						<Button variant="text" endIcon={<FeatherIcon icon='chevron-right' />}>
+							See More
+						</Button>
+					</Stack>
+					<Grid container sx={{my: 2, p:0}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
 						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="VJTI" />
 						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="FRCRCE" />
 						<MediaCard url= "https://robohash.org/${id}?set=set2&size=180x180" name="Dj Sanghvi" />
-					
+						<MediaCard url= "https://robohash.org/${id}?set=set2&size=180x180" name="Dj Sanghvi" />
 					</Grid>
-
-
-					{/* <Grid item container justifyContent='space-evenly'>
-						{allHackathon.map((hackathon) => {
-							if (enrolledHackathon.includes(hackathon.id))
-								return <HackathonCard hackathon={hackathon} />
-						})}
-					</Grid> */}
-					<Grid sx={{my:2}}>	
+				</Stack>
+				<Stack sx={{mx: 4, my:2, width: '80%'}}>
+					<Stack justifyContent='space-between' alignItems='center' direction='row' sx={{width: '100%', mb: 2}}>
 						<Typography variant='h5'>
 							Explore Courses
 						</Typography>
-				
-
+						<Button variant="text" endIcon={<FeatherIcon icon='chevron-right' />}>
+							See More
+						</Button>
+					</Stack>
+					<Grid container sx={{my: 2, p:0}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
+						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="BE" />
+						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="B-COM" />
+						<MediaCard url= "https://robohash.org/${id}?set=set2&size=180x180" name="BA" />
 					</Grid>
-					<Button variant="contained" endIcon={<SendIcon />}>
-        see more
-      </Button>
-					<Grid sx={{my:2}} item container justifyContent='space-evenly'>
-						<MediaCard name= "BE"/>
-						<MediaCard name= "Bcom"/>
-						<MediaCard name= "BA"/>
-				
-					</Grid>
-
-					{/* <Grid item container justifyContent='space-evenly'>
-						{allHackathon.map((hackathon) => {
-							if (enrolledHackathon.includes(hackathon.id))
-								return <HackathonCard hackathon={hackathon} />
-						})}
-					</Grid> */}
-					
-					<Grid direction="row" spacing={2} sx={{my:2}}>	
+				</Stack>
+				<Stack sx={{mx: 4, my:2, width: '80%'}}>
+					<Stack justifyContent='space-between' alignItems='center' direction='row' sx={{width: '100%', mb: 2}}>
 						<Typography variant='h5'>
-							Explore States
+							Explore Courses
 						</Typography>
-					
+						<Button variant="text" endIcon={<FeatherIcon icon='chevron-right' />}>
+							See More
+						</Button>
+					</Stack>
+					<Grid container sx={{my: 2, p:0}} spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }} justifyContent='center'>
+						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="Maharashtra" />
+						<MediaCard  url= "https://robohash.org/${id}?set=set2&size=180x180" name="Goa" />
+						<MediaCard url= "https://robohash.org/${id}?set=set2&size=180x180" name="Kerala" />
 					</Grid>
-					<Button variant="contained" endIcon={<SendIcon />}>
-        see more
-</Button>
-					<Grid sx={{my:2}} item container justifyContent='space-evenly'>
-						<MediaCard name="Maharastra"/>
-						<MediaCard name="Goa"/>
-						<MediaCard name="Kerala"/>
-
-					</Grid>
-				
-					{/* <Grid item container justifyContent='space-evenly'>
-						{allHackathon.map((hackathon) => {
-							if (enrolledHackathon.includes(hackathon.id))
-								return <HackathonCard hackathon={hackathon} />
-						})}
-					</Grid> */}
-					
-					
-			    </Grid>
-				</Grid>
-			</Container>
-		</>
+				</Stack>
+			</Grid>
+		</Layout>
 	)
 }
 

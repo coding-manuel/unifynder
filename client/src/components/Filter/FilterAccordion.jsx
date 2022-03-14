@@ -4,6 +4,11 @@ import FeatherIcon from 'feather-icons-react'
 
 export default function FilterAccordion({handleFilters, categories}) {
   const [checked, setChecked] = useState([]);
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handleChange = (panel) => {
+    setExpanded(!expanded);
+  };
 
   const handleToggle = (value) =>{
     const currentIndex = checked.indexOf(value)
@@ -19,7 +24,7 @@ export default function FilterAccordion({handleFilters, categories}) {
   }
 
   return (
-    <Accordion>
+    <Accordion expanded={expanded} onChange={() => handleChange()}>
         <AccordionSummary
           expandIcon={<FeatherIcon icon='chevron-down' size="16"/>}
           aria-controls="panel1a-content"
@@ -32,7 +37,7 @@ export default function FilterAccordion({handleFilters, categories}) {
           {categories[1].map(value =>{
             return(
               <FormControlLabel
-              control={<Checkbox defaultChecked />}
+              control={<Checkbox defaultChecked/>}
               label={<Typography variant='subtitle2'>{value.name}</Typography>}
               onChange={(e)=>{handleToggle(value.id)}}
               checked={checked.indexOf(value.id)===-1 ? false : true}
