@@ -47,7 +47,10 @@ const unischema = new schema({
     State: String,
     Country: String,
     College_Type: String,
-    Average_Fees: Number
+    Average_Fees: Number,
+    Cutoff_Round_One: Number,
+    Cutoff_Round_Two: Number,
+    Images: String
 
     
 
