@@ -7,6 +7,7 @@ import Feed from './pages/Feed'
 import Admin from './pages/Admin'
 import Search from './pages/Search'
 
+import Homepage from './pages/Homepage.jsx'
 const App = () => {
 	return (
 		<div className='App'>
@@ -15,6 +16,7 @@ const App = () => {
 				<Route path='dash' element={<Dashboard />} />
 				<Route path='feed' element={<Feed />} />
 				<Route path='search' element={<Search />} />
+				<Route path='home' element={<Homepage />} />
 				<Route path='admin' element={<Admin />} />
 			</Routes>
 		</div>
