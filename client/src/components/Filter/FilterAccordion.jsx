@@ -38,9 +38,9 @@ export default function FilterAccordion({handleFilters, categories}) {
             return(
               <FormControlLabel
               control={<Checkbox defaultChecked/>}
-              label={<Typography variant='subtitle2'>{value.name}</Typography>}
-              onChange={(e)=>{handleToggle(value.id)}}
-              checked={checked.indexOf(value.id)===-1 ? false : true}
+              label={<Typography variant='subtitle2' sx={{fontSize: 12}}>{value.name}</Typography>}
+              onChange={(e)=>{handleToggle(value.name)}}
+              checked={checked.indexOf(value.name)===-1 ? false : true}
               />
             )
           })}

@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react'
-import {AppBar, Slider, Box, Divider, Pagination, Drawer, IconButton, Toolbar, Typography, Grid, Select, InputLabel, FormControl, Stack, MenuItem, FormGroup, Switch, FormControlLabel} from '@mui/material'
+import React, {useState, useEffect, useContext} from 'react'
+import {AppBar, Button, Slider, Box, Divider, Pagination, Drawer, IconButton, Toolbar, Typography, Grid, Select, InputLabel, FormControl, Stack, MenuItem, FormGroup, Switch, FormControlLabel, Menu} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import FeatherIcon from 'feather-icons-react'
 import {Link} from 'react-router-dom'
@@ -8,71 +8,37 @@ import axios from "../services/axios"
 import Logo from '../components/Logo/Logo'
 import FilterAccordion from '../components/Filter/FilterAccordion'
 import UniversityCard from '../components/Filter/UniversityCard'
-import {collegeData} from "../sample"
+import { UserContext } from '../services/UserContext'
 import Navbar from '../components/Navbar/Navbar'
 import Loader from '../components/Loader'
-
-const categories = {
-  "City":[
-    {
-      id:1,
-      name:'Mumbai'
-    },
-    {
-      id:2,
-      name:'Delhi'
-    },
-    {
-      id:3,
-      name:'Patna'
-    },
-    {
-      id:4,
-      name:'Manipal'
-    },
-    {
-      id:5,
-      name:'Bhopal'
-    }
-  ],
-  "University":[
-    {
-      id:1,
-      name: "MU"
-    },
-    {
-      id:2,
-      name: "CU"
-    },
-    {
-      id:2,
-      name: "DU"
-    }
-  ],
-  "Type":[
-    {
-      id:1,
-      name: "Private"
-    },
-    {
-      id:2,
-      name: "Government"
-    }
-  ]
-}
+import { categories } from '../filter'
 
 export default function Search() {
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [filters, setFilters] = useState({City: [], University: [], Type: []});
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [filters, setFilters] = useState({University: [], State: []});
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [uniData, setUniData] = useState([]);
   const [eligible, setEligible] = useState(false);
   const [loader, setLoader] = useState(true);
+  const {user, setUser } = useContext(UserContext);
 
+	const open = Boolean(anchorEl)
   const drawerWidth = 240
   const container = window.document.body
 
+  const handleClick = (event) => {
+		setAnchorEl(event.currentTarget)
+	};
+	const handleClose = () => {
+		setAnchorEl(null)
+	};
+	const handleLogout = () =>{
+		localStorage.removeItem('userID')
+		setUser(null)
+		navigate('/home')
+	}
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
@@ -86,7 +52,8 @@ export default function Search() {
     setLoader(true)
     axios()
     .get("/getUni",{params: {
-      page: page
+      page: page,
+      filters: filters,
     }})
     .then(res => {
       setUniData(res)
@@ -96,7 +63,7 @@ export default function Search() {
     .catch(err =>{
       console.error(error)
     })
-  }, [page]);
+  }, [filters, page]);
 
   const [sort, setSort] = React.useState('');
 
@@ -125,50 +92,32 @@ export default function Search() {
 
     const minDistance = 10;
 
-    const [value1, setValue1] = React.useState([20, 37]);
+    const [rating, setRating] = React.useState([1, 3]);
 
-    const handleChange1 = (event, newValue, activeThumb) => {
+    const handleChange = (event, newValue, activeThumb) => {
       if (!Array.isArray(newValue)) {
         return;
       }
 
-      if (activeThumb === 0) {
-        setValue1([Math.min(newValue[0], value1[1] - minDistance), value1[1]]);
-      } else {
-        setValue1([value1[0], Math.max(newValue[1], value1[0] + minDistance)]);
-      }
+      setRating(newValue)
     };
 
-    const [value2, setValue2] = React.useState([20, 37]);
-
-    const handleChange2 = (event, newValue, activeThumb) => {
-      if (!Array.isArray(newValue)) {
-        return;
-      }
-
-      if (newValue[1] - newValue[0] < minDistance) {
-        if (activeThumb === 0) {
-          const clamped = Math.min(newValue[0], 100 - minDistance);
-          setValue2([clamped, clamped + minDistance]);
-        } else {
-          const clamped = Math.max(newValue[1], minDistance);
-          setValue2([clamped - minDistance, clamped]);
-        }
-      } else {
-        setValue2(newValue);
-      }
-    }
     return (
-      <Box sx={{ width: 300 }}>
+      <Stack sx={{mx:3, my:2}} gap={2}>
+        <Typography variant='subtitle1'>College Rating</Typography>
         <Slider
           getAriaLabel={() => 'Minimum distance'}
-          value={value1}
-          onChange={handleChange1}
+          value={rating}
+          onChange={handleChange}
           valueLabelDisplay="auto"
           getAriaValueText={valuetext}
+          min={0}
+          step={0.2}
+          size='small'
+          max={5}
           disableSwap
         />
-      </Box>
+      </Stack>
     )
   }
 
@@ -187,7 +136,7 @@ export default function Search() {
           )
         })}
       <FormGroup sx={{py:1}}>
-        <FormControlLabel control={<Switch defaultChecked />} onChange={(e)=>{setEligible(!eligible)}} checked={eligible} label="Am I eligible?" />
+        <FormControlLabel control={<Switch defaultChecked />} onChange={(e)=>{setEligible(!eligible)}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
       </FormGroup>
       <Divider />
       <PriceSlider />
@@ -219,15 +168,30 @@ export default function Search() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Search Colleges
           </Typography>
-            <Stack direction='row' alignItems='center' justifyContent='flex-end' gap={2}>
-              <IconButton component={Link} to="/watchlist" aria-label="WatchList">
-                <FeatherIcon icon='bookmark' />
-              </IconButton>
-              <IconButton component={Link} to="/profile" aria-label="Profile">
-                <FeatherIcon icon='user' />
-              </IconButton>
-            </Stack>
+          {user ?
+					<Stack direction='row' alignItems='center' justifyContent='flex-end' gap={2} mx={2}>
+						<IconButton component={Link} to="/watchlist" aria-label="WatchList">
+							<FeatherIcon icon='bookmark' />
+						</IconButton>
+						<IconButton aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} aria-label="Profile" onClick={handleClick}>
+							<FeatherIcon icon='user' />
+						</IconButton>
+					</Stack> :
+					<Button component={Link} to='/authenticate' variant='contained'>Register</Button>
+					}
           </Toolbar>
+          <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+          'aria-labelledby': 'basic-button',
+          }}>
+            <MenuItem component={Link} to='/profile' onClick={handleClose}>Profile</MenuItem>
+            <MenuItem component={Link} to='/newsfeed' onClick={handleClose}>News Feed</MenuItem>
+            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          </Menu>
         </AppBar>
         <Box
           component="nav"
@@ -268,7 +232,7 @@ export default function Search() {
           <>
             <Stack pb={2} direction='row' alignItems='center' justifyContent='space-between' gap={2}>
               <Stack >
-                <Typography>Displaying {uniData.data.pagination.skip + 50} of {uniData.data.pagination.count} results</Typography>
+                <Typography>Displaying {Math.min(uniData.data.pagination.count, page * 50)} of {uniData.data.pagination.count} results</Typography>
                 <Typography>Page {page}</Typography>
               </Stack>
               <FormControl fullWidth sx={{maxWidth: 200, fontSize: '12px'}}>

@@ -9,6 +9,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors')
 var morgan = require('morgan')
+var categories = require('./filter')
 
 const { user, validate, uni} = require('./schemas/data');
 const port = 8000;
@@ -99,20 +100,40 @@ app.post('/api/auth', async (req, res) => {
 });
 
 app.get('/api/getUser', async (req, res) =>{
-    let User = await user.findOne({ _id: req.body._id });
+    let User = await user.findOne({ _id: req.query.user });
     res.send(User)
+})
+
+app.post('/api/enterMarks', async(req, res) =>{
+    console.log()
+    let User = await user.findOne({ _id: req.body.user });
+    User.marks = req.body.marks
+    User.save();
+    res.send(User);
 })
 
 app.get('/api/getUni', async(req, res) =>{
     const page = req.query.page
+    const filters = JSON.parse(req.query.filters)
     const limit = 50
     const skip = (page - 1) * limit
 
-    const query = {}
-    try {
-        const count = await uni.estimatedDocumentCount({})
+    if(filters["University"].length === 0){
+        filters["University"] = categories.University
+    }
+    if(filters["State"].length === 0){
+        filters["State"] = categories.State
+    }
 
-        const items = await uni.find({}).limit(limit).skip(skip)
+    let query = {
+        State : {$in: filters["State"]},
+        University : {$in: filters["University"]}
+    };
+    //let term = req.body.searchTerm;
+    try {
+        const count = await uni.count(query)
+
+        const items = await uni.find(query).limit(limit).skip(skip)
 
         const pageCount = count / limit
         res.send({
@@ -135,7 +156,7 @@ app.post('/wishlist', async function (req, res) {
     let User = await user.findOne({ email: req.body.email });
     User.wishlist = wishlist
     User.save();
-        res.send("wishlist updated");
+    res.send("wishlist updated");
 })
 
 //this route has issues

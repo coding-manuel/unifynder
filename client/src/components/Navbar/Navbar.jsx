@@ -45,6 +45,7 @@ const Navbar = () => {
 					}
 				</Toolbar>
 			</AppBar>
+
 			<Menu
 			id="basic-menu"
 			anchorEl={anchorEl}
@@ -54,6 +55,7 @@ const Navbar = () => {
 			'aria-labelledby': 'basic-button',
 			}}>
 				<MenuItem component={Link} to='/profile' onClick={handleClose}>Profile</MenuItem>
+				<MenuItem component={Link} to='/newsfeed' onClick={handleClose}>News Feed</MenuItem>
 				<MenuItem onClick={handleLogout}>Logout</MenuItem>
 			</Menu>
 		</>

@@ -23,16 +23,14 @@ const registerschema = new schema({
         maxlength: 300
     },
     marks: {
+        default: null,
         type: Number,
         min:0
     },
     wishlist: [{
-            type: schema.Types.ObjectId,
-            ref: 'uni'
-        }]
-
-
-
+        type: schema.Types.ObjectId,
+        ref: 'uni'
+    }]
 })
 
 const unischema = new schema({
