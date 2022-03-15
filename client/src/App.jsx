@@ -8,7 +8,7 @@ import Feed from './pages/Feed'
 import Search from './pages/Search'
 import Profile from './pages/Profile'
 import Watchlist from './pages/Watchlist'
-
+import Collegepage from './pages/Collegepage'
 import Homepage from './pages/Homepage.jsx'
 const App = () => {
 	const [user, setUser] = useState(localStorage.getItem('userID'));
@@ -35,6 +35,7 @@ const App = () => {
 					<Route path='newsfeed' element={<PrivateRoute><Feed /></PrivateRoute>} />
 					<Route path='watchlist' element={<PrivateRoute><Watchlist /></PrivateRoute>} />
 					<Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
+					<Route path='college' element={<Collegepage />} />
 				</Routes>
 			</UserContext.Provider>
 		</div>
