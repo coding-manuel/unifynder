@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useContext, useEffect } from 'react'
 import { Button, Paper, Grid, Typography, Link, Snackbar, IconButton, Stack } from '@mui/material'
 import FeatherIcon from 'feather-icons-react'
 import { useNavigate } from 'react-router-dom'
@@ -6,6 +6,7 @@ import axios from '../services/axios'
 
 import Input from '../components/Auth/Input'
 import Loader from '../components/Loader'
+import { UserContext } from '../services/UserContext'
 
 export default function Auth() {
 	let navigate = useNavigate()
@@ -42,7 +43,8 @@ export default function Auth() {
 						password: password,
 					})
 					.then((res) => {
-						setLoader(false)
+						localStorage.setItem('userID', res._id)
+						setUser(localStorage.getItem('userID'))
 						setLoader(false)
 						navigate('/home')
 					})
@@ -51,18 +53,20 @@ export default function Auth() {
 						setOpen(true)
 						setError(error.response.data)
 					})
-			}
-		} else {
-			if (email === '' || password === '') {
-				setOpen(true)
-				setError('Fill all the details')
-			}else{
-				axios()
+				}
+			} else {
+				if (email === '' || password === '') {
+					setOpen(true)
+					setError('Fill all the details')
+				}else{
+					axios()
 					.post('/auth', {
 						email: email,
 						password: password,
 					})
 					.then((res) => {
+						localStorage.setItem('userID', res.data)
+						setUser(localStorage.getItem('userID'))
 						setLoader(false)
 						navigate('/home')
 					})
@@ -72,127 +76,132 @@ export default function Auth() {
 						setError(error.response.data)
 					})
 				}
+			}
 		}
-	}
 
-	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return
+		useEffect(() => {
+			console.log(user)
+			return user && navigate('/dashboard')
+		}, []);
+
+		const handleClose = (event, reason) => {
+			if (reason === 'clickaway') {
+				return
+			}
+			setOpen(false)
 		}
-		setOpen(false)
-	}
 
-	return (
-		<Grid container alignItems='center' justifyContent='center' sx={{ height: '100vh' }}>
-			<Snackbar
-				open={open}
-				autoHideDuration={3000}
-				onClose={handleClose}
-				message={error}
-				action={
-					<React.Fragment>
-						<IconButton
-							aria-label='close'
-							color='inherit'
-							sx={{ padding: '5px', borderRadius: '6px' }}
-							onClick={handleClose}
-						>
-							<FeatherIcon icon='x' size='16' />
-						</IconButton>
-					</React.Fragment>
-				}
-			/>
-			<Grid item>
-				<Paper sx={{ py: 4, px: 6}}>
-					<form autoComplete='off' noValidate onSubmit={handleSubmit}>
-						<Grid
-							container
-							direction='column'
-							justifyContent='center'
-							alignItems='center'
-							spacing={2}
-						>
-							<Grid item xs={12}>
-								<Typography variant='h5' align='center'>
-									{isSignUp ? 'Sign Up' : 'Welcome Back!'}
-								</Typography>
-							</Grid>
-							<Grid item>
-								<FeatherIcon icon='lock' />
-							</Grid>
-							{isSignUp && (
-								<>
-									<Input
-										name='Name'
-										label='Full Name'
-										handleChange={(event) => setName(event.target.value)}
-										value={name}
-										half
-										autoFocus={true}
-									/>
-								</>
-							)}
-							<Input
-								name='email'
-								label='Email Address'
-								handleChange={(event) => setEmail(event.target.value)}
-								value={email}
-								type='email'
-							/>
-							<Input
-								name='password'
-								label='Password'
-								handleChange={(event) => setPassword(event.target.value)}
-								value={password}
-								type='password'
-							/>
-							{isSignUp && (
+		return (
+			<Grid container alignItems='center' justifyContent='center' sx={{ height: '100vh' }}>
+				<Snackbar
+					open={open}
+					autoHideDuration={3000}
+					onClose={handleClose}
+					message={error}
+					action={
+						<React.Fragment>
+							<IconButton
+								aria-label='close'
+								color='inherit'
+								sx={{ padding: '5px', borderRadius: '6px' }}
+								onClick={handleClose}
+							>
+								<FeatherIcon icon='x' size='16' />
+							</IconButton>
+						</React.Fragment>
+					}
+				/>
+				<Grid item>
+					<Paper sx={{ py: 4, px: 6}}>
+						<form autoComplete='off' noValidate onSubmit={handleSubmit}>
+							<Grid
+								container
+								direction='column'
+								justifyContent='center'
+								alignItems='center'
+								spacing={2}
+							>
+								<Grid item xs={12}>
+									<Typography variant='h5' align='center'>
+										{isSignUp ? 'Sign Up' : 'Welcome Back!'}
+									</Typography>
+								</Grid>
+								<Grid item>
+									<FeatherIcon icon='lock' />
+								</Grid>
+								{isSignUp && (
+									<>
+										<Input
+											name='Name'
+											label='Full Name'
+											handleChange={(event) => setName(event.target.value)}
+											value={name}
+											half
+											autoFocus={true}
+										/>
+									</>
+								)}
 								<Input
-									name='confirmPassword'
-									label='Repeat Password'
-									handleChange={(event) => setRepeatPassword(event.target.value)}
-									value={repeatPassword}
+									name='email'
+									label='Email Address'
+									handleChange={(event) => setEmail(event.target.value)}
+									value={email}
+									type='email'
+								/>
+								<Input
+									name='password'
+									label='Password'
+									handleChange={(event) => setPassword(event.target.value)}
+									value={password}
 									type='password'
 								/>
-							)}
+								{isSignUp && (
+									<Input
+										name='confirmPassword'
+										label='Repeat Password'
+										handleChange={(event) => setRepeatPassword(event.target.value)}
+										value={repeatPassword}
+										type='password'
+									/>
+								)}
 
-							<Button sx={{ mt: 4 }} type='submit' variant='contained' color='primary'>
-								<Stack direction='row' alignItems='center' gap={1}>
-									{isSignUp ? 'Sign Up' : 'Sign In'}
-									{loader && <Loader size={16} />}
-								</Stack>
-							</Button>
-						</Grid>
-					</form>
-				</Paper>
-				{isSignUp === true ? (
-					<Typography py={1} variant='subtitle1'>
-						Already a member?
-						<Link
-							sx={{ px: '4px', cursor: 'pointer' }}
-							underline='hover'
-							onClick={() => {
-								setIsSignUp(!isSignUp)
-							}}
-						>
-							Sign In
-						</Link>
-					</Typography>
-				) : (
-					<Typography py={1} variant='subtitle1'>
-						Not a member?
-						<Link
-							sx={{ px: '4px', cursor: 'pointer' }}
-							underline='hover'
-							onClick={() => {
-								setIsSignUp(!isSignUp)
-							}}
-						>
-							Sign up
-						</Link>
-					</Typography>
-				)}
+								<Button sx={{ mt: 4 }} type='submit' variant='contained' color='primary'>
+									<Stack direction='row' alignItems='center' gap={1}>
+										{isSignUp ? 'Sign Up' : 'Sign In'}
+										{loader && <Loader size={16} />}
+									</Stack>
+								</Button>
+							</Grid>
+						</form>
+					</Paper>
+					{isSignUp === true ? (
+						<Typography py={1} variant='subtitle1'>
+							Already a member?
+							<Link
+								sx={{ px: '4px', cursor: 'pointer' }}
+								underline='hover'
+								onClick={() => {
+									setIsSignUp(!isSignUp)
+								}}
+							>
+								Sign In
+							</Link>
+						</Typography>
+					) : (
+						<Typography py={1} variant='subtitle1'>
+							Not a member?
+							<Link
+								sx={{ px: '4px', cursor: 'pointer' }}
+								underline='hover'
+								onClick={() => {
+									setIsSignUp(!isSignUp)
+								}}
+							>
+								Sign up
+							</Link>
+						</Typography>
+					)}
+				</Grid>
 			</Grid>
-		</Grid>
-	)
+		)
 }

@@ -6,11 +6,9 @@ if (process.env.NODE_ENV !== 'production')
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
 const express = require('express');
-const path = require('path');
-const methodOverride = require('method-override');
-const ejsMate = require('ejs-mate');
 const bcrypt = require('bcrypt');
 const cors = require('cors')
+var morgan = require('morgan')
 
 const { user, validate, uni} = require('./schemas/data');
 const port = 8000;
@@ -26,6 +24,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({origin: 3000, credentials:true}))
+app.use(morgan('tiny'))
 
 const mongoose = require('mongoose');
 const dbUrl= process.env.DB_URL
@@ -68,6 +67,7 @@ app.post('/api/register', async (req, res) => {
          const salt = await bcrypt.genSalt(10);
         User.password = await bcrypt.hash(User.password, salt);
         await User.save();
+
         res.send(User);
     }
 });
@@ -95,8 +95,39 @@ app.post('/api/auth', async (req, res) => {
         return res.status(401).send('Incorrect email or password.');
     }
 
-    res.send(true);
+    res.send(User._id);
 });
+
+app.get('/api/getUser', async (req, res) =>{
+    let User = await user.findOne({ _id: req.body._id });
+    res.send(User)
+})
+
+app.get('/api/getUni', async(req, res) =>{
+    const page = req.query.page
+    const limit = 50
+    const skip = (page - 1) * limit
+
+    const query = {}
+    try {
+        const count = await uni.estimatedDocumentCount({})
+
+        const items = await uni.find({}).limit(limit).skip(skip)
+
+        const pageCount = count / limit
+        res.send({
+            pagination:{
+                count,
+                pageCount,
+                skip,
+            },
+            items,
+        })
+    } catch (error) {
+        console.error(error)
+        return error
+    }
+})
 
 app.post('/wishlist', async function (req, res) {
     const { wishlist } = req.body
@@ -105,9 +136,6 @@ app.post('/wishlist', async function (req, res) {
     User.wishlist = wishlist
     User.save();
         res.send("wishlist updated");
-
-
-
 })
 
 //this route has issues
@@ -121,14 +149,8 @@ app.get('/wishlist/:id', function (req, res) {
 
 })
 
-
-
-
 app.get('/register', function (req, res) {
-
     res.render('register.ejs');
-
-
 })
 
 

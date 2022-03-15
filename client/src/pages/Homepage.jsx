@@ -3,7 +3,6 @@ import { Grid, Button, Typography, InputAdornment, FormControl, Stack } from '@m
 import { Link } from 'react-router-dom'
 import TextField from '@mui/material/TextField';
 import MediaCard from '../components/Mediacards';
-import SendIcon from '@mui/icons-material/Send';
 import FeatherIcon from 'feather-icons-react'
 
 import axios from '../services/axios'

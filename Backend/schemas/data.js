@@ -72,7 +72,6 @@ function validateUser(User) {
 }
 const uni = mongoose.model('uni', unischema);
 
-
 exports.user = user;
 exports.validate = validateUser;
 exports.uni = uni;

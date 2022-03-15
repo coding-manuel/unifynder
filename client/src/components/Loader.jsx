@@ -9,7 +9,7 @@ const StyledIcon = styled(FeatherIcon)(({ theme }) => ({
 }));
 
 
-export default function Loader({size, pad}) {
+export default function Loader({size}) {
   return (
     <StyledIcon icon='loader' size={size} />
   )

@@ -13,10 +13,10 @@ export default function UniversityCard({collegeInfo}) {
                         height="140"
                         sx={{width: '345px'}}
                         image={collegeInfo.Images}
-                        alt={collegeInfo.CollegeName}
+                        alt={collegeInfo.College_Name}
                     />
                     <CardContent>
-                        <Typography gutterBottom variant="h6" sx={{m: '-50px 0px 0px', fontSize: 18}}>{collegeInfo.CollegeName}</Typography>
+                        <Typography gutterBottom variant="h6" sx={{m: '-50px 0px 0px', fontSize: 18}}>{collegeInfo.College_Name}</Typography>
                         <Stack direction='row' alignItems='center' gap={1}>
                             <FeatherIcon size={12} icon='map-pin' />
                             <Typography variant="subtitle2" sx={{fontSize: 12}} color="text.secondary">{collegeInfo.City + ',' + collegeInfo.State}</Typography>
