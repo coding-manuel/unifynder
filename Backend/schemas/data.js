@@ -28,8 +28,7 @@ const registerschema = new schema({
         min:0
     },
     wishlist: [{
-        type: schema.Types.ObjectId,
-        ref: 'uni'
+        type: String
     }]
 })
 

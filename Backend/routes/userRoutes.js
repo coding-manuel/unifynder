@@ -25,7 +25,7 @@ router.post('/wishlist', async function (req, res) {
     res.send("wishlist updated");
 })
 
-//this route has issues
+//this route has issues && old route
 router.get('/wishlist/:id', function (req, res) {
     const id  = req.params.id;
     const User = user.findOne({ email: req.params.id });
@@ -33,6 +33,26 @@ router.get('/wishlist/:id', function (req, res) {
     let coll = uni.findOne({ _id: college })
     res.send(coll.College_Name)
     res.send("hello")
+})
+
+//new watchlist routes
+
+router.post('/addToWatchlist', async function (req, res) {
+    const col = req.body.collegeid;
+    const em = req.body.email;
+    const colname = req.body.collegename
+    //let College = await uni.find({ $or: [{ _id: col }, { College_Name: colname }] })
+    let College = await uni.find({ _id: col })
+    const x = College._id
+    const update = { wishlist: x };
+    let us = await user.findOneAndUpdate({ email: em }, update)
+    res.send("updated")
+})
+
+router.get('/watchlist', async function (req, res) {
+    
+    let User = await user.findOne({ _id: req.query.user });
+    res.send(User)
 })
 
 module.exports = router
