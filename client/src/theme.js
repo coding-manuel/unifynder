@@ -12,7 +12,7 @@ export const theme = createTheme({
 		},
 		background: {
 			default: '#1F1F1F',
-			paper: '#383838',
+			paper: '#292929',
 		},
 		error: {
 			main: '#E70E02',
@@ -59,6 +59,14 @@ export const theme = createTheme({
 				}
 			}
 		},
+		MuiSnackbarContent:{
+			styleOverrides:{
+				root:{
+					background: '#292929',
+					color: '#ffffff',
+				}
+			}
+		},
 		MuiCheckbox:{
 			styleOverrides:{
 				root:{
@@ -101,10 +109,10 @@ export const theme = createTheme({
 		MuiIconButton: {
 			styleOverrides: {
 				root: {
-					borderRadius: 6,
+					borderRadius: 4,
 					border: 'thin rgba(255, 255, 255, 0.12) solid',
 					marginLeft: 0,
-					padding: 6,
+					padding: 8,
 				},
 			},
 			variants: [
@@ -118,6 +126,13 @@ export const theme = createTheme({
 					},
 				},
 			],
+		},
+		MuiPagination:{
+			styleOverrides:{
+				ul:{
+					justifyContent: 'center'
+				}
+			}
 		},
 		MuiTreeView: {
 			styleOverrides: {
@@ -179,7 +194,7 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: {
 					fontWeight: 500,
-					borderRadius: 4,
+					borderRadius: 8,
 					borderWidth: '2px',
 					transition: 'all 2000 ease-out',
 					'&:hover': {

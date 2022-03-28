@@ -8,8 +8,10 @@ import Feed from './pages/Feed'
 import Search from './pages/Search'
 import Profile from './pages/Profile'
 import Watchlist from './pages/Watchlist'
-import Collegepage from './pages/Collegepage'
 import Homepage from './pages/Homepage.jsx'
+import University from './pages/University'
+import NotFound from './pages/NotFount'
+
 const App = () => {
 	const [user, setUser] = useState(localStorage.getItem('userID'));
 
@@ -22,20 +24,31 @@ const App = () => {
 
 	const PrivateRoute = ({ children }) => {
 		console.log(user)
-		return user ? children : <Navigate to='/authenticate' />
+		return user ? children : <Navigate to='authenticate' />
 	}
 	return (
 		<div className='App'>
 			<UserContext.Provider value={value}>
 				<Routes>
-					<Route path='authenticate' element={<Auth />} />
-					<Route path='search' element={<Search />} />
 					<Route path='home' element={<Homepage />} />
+					<Route path='/' exact element={<Navigate to="home" />} />
+
+					<Route path='authenticate' element={<Auth />} />
+
+					<Route path='search' element={<Search />}>
+						<Route path='s=:state' element={<Search />}/>
+						<Route path='t=:searchterm' element={<Search />}/>
+					</Route>
+
 					<Route path='dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 					<Route path='newsfeed' element={<PrivateRoute><Feed /></PrivateRoute>} />
 					<Route path='watchlist' element={<PrivateRoute><Watchlist /></PrivateRoute>} />
 					<Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
-					<Route path='college' element={<Collegepage />} />
+
+					<Route path='university/:id' element={<University />} />
+
+					<Route path="notfound" element={<NotFound />} />
+					<Route path="*" element={<Navigate to="notfound" />} />
 				</Routes>
 			</UserContext.Provider>
 		</div>

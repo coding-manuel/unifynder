@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Button, Container, Typography, Stack } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 
 import NewsCard from '../components/NewsCard'
@@ -33,7 +33,7 @@ const Feed = () => {
 			<Container maxWidth='lg' sx={{py:2}}>
 				<Stack>
 					<Typography variant='h4' align='center'>
-						News Articles
+						Announcements
 					</Typography>
 					{news[0].articles.map(value =>{
 						return(

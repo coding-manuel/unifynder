@@ -26,7 +26,7 @@ const Profile = () => {
       setError("Marks cannot be greater that 100")
     }
     axios()
-    .post('/enterMarks',{
+    .post('/user/enterMarks',{
       marks: marks,
       user: user
     })
@@ -47,7 +47,7 @@ const Profile = () => {
 
   useEffect(()=>{
     axios()
-    .get('/getUser',{params: {
+    .get('/user/getUser',{params: {
       user: user
     }})
     .then(res =>{

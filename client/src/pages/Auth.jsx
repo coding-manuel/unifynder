@@ -4,7 +4,8 @@ import FeatherIcon from 'feather-icons-react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../services/axios'
 
-import Input from '../components/Auth/Input'
+import SnackBar from '../components/SnackBar'
+import Input from '../components/TextField/Input'
 import Loader from '../components/Loader'
 import { UserContext } from '../services/UserContext'
 
@@ -37,7 +38,7 @@ export default function Auth() {
 			}
 			else{
 				axios()
-					.post('/register', {
+					.post('/auth/register', {
 						name: name,
 						email: email,
 						password: password,
@@ -60,7 +61,7 @@ export default function Auth() {
 					setError('Fill all the details')
 				}else{
 					axios()
-					.post('/auth', {
+					.post('/auth/login', {
 						email: email,
 						password: password,
 					})
@@ -93,24 +94,7 @@ export default function Auth() {
 
 		return (
 			<Grid container alignItems='center' justifyContent='center' sx={{ height: '100vh' }}>
-				<Snackbar
-					open={open}
-					autoHideDuration={3000}
-					onClose={handleClose}
-					message={error}
-					action={
-						<React.Fragment>
-							<IconButton
-								aria-label='close'
-								color='inherit'
-								sx={{ padding: '5px', borderRadius: '6px' }}
-								onClick={handleClose}
-							>
-								<FeatherIcon icon='x' size='16' />
-							</IconButton>
-						</React.Fragment>
-					}
-				/>
+				<SnackBar open={open} handleClose={handleClose} error={error} />
 				<Grid item>
 					<Paper sx={{ py: 4, px: 6}}>
 						<form autoComplete='off' noValidate onSubmit={handleSubmit}>

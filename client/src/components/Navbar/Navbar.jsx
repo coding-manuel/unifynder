@@ -28,17 +28,17 @@ const Navbar = () => {
 	return (
 		<>
 			<AppBar position='static'>
-				<Toolbar>
+				<Toolbar sx={{padding: '0px 16px !important'}}>
 					<Box sx={{flexGrow: 2}}>
 						<Logo />
 					</Box>
 					{user ?
-					<Stack direction='row' alignItems='center' justifyContent='flex-end' gap={2} mx={2}>
+					<Stack direction='row' alignItems='center' justifyContent='flex-end' gap={2}>
 						<IconButton component={Link} to="/watchlist" aria-label="WatchList">
-							<FeatherIcon icon='bookmark' />
+							<FeatherIcon icon='bookmark' size='20'/>
 						</IconButton>
 						<IconButton aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} aria-label="Profile" onClick={handleClick}>
-							<FeatherIcon icon='user' />
+							<FeatherIcon icon='user' size='20'/>
 						</IconButton>
 					</Stack> :
 					<Button component={Link} to='/authenticate' variant='contained'>Register</Button>
