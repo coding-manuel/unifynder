@@ -57,6 +57,13 @@ const unischema = new schema({
     Images: String
 })
 
+const wlschema = new schema({
+    userid: String,
+    collegeid: {
+        type: String
+    }
+})
+
 const user = mongoose.model('user', registerschema);
 
 function validateUser(User) {
@@ -68,8 +75,10 @@ function validateUser(User) {
     return Schema.validate(User);
 }
 const uni = mongoose.model('uni', unischema);
+const watchlist = mongoose.model('watchlist', wlschema);
 
 exports.user = user;
 exports.validate = validateUser;
 exports.uni = uni;
+exports.watchlist = watchlist;
 
