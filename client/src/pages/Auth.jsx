@@ -44,7 +44,7 @@ export default function Auth() {
 						password: password,
 					})
 					.then((res) => {
-						localStorage.setItem('userID', res._id)
+						localStorage.setItem('userID', res.data)
 						setUser(localStorage.getItem('userID'))
 						setLoader(false)
 						navigate('/home')

@@ -40,42 +40,33 @@ router.get('/wishlist/:id', function (req, res) {
 
 //new watchlist routes
 
-/*router.post('/addToWatchlist', async function (req, res) {
-    const col = req.body.collegeid;
-    const em = req.body.email;
-    const colname = req.body.collegename
-    const id = req.body._id;
-    //let College = await uni.find({ $or: [{ _id: col }, { College_Name: colname }] })
-    let College = await uni.find({ College_Name: colname })
-    const x = College._id
-    let use = await user.findById(id)
-    const xx = use._id
-    //const update = { wishlist: x };
-    //let us = await user.findByIdAndUpdate(id , { wishlist: College.id });
-    let watchl = 
-    res.send("updated")
-}) */
-
 router.post('/addToWatchlist', async(req, res) =>{
-    console.log()
     let college = await uni.findOne({ College_Name: req.body.collegename })
     let collegeid = college.id
-     let User = await user.findOneAndUpdate({ _id: req.body.user }, { wishlist:collegeid });
+    let User = await user.findOneAndUpdate({ _id: req.body.user }, {$push: {wishlist:collegeid }});
 
-   // User.wishlist = college._id
-   // User.save();
-   // let x = new watchlist({ 
-   //     userid: User._id,
-    //    collegeid: college.College_Name
-   // })
-   // x.save();
-    res.send("updated")
+    res.send(true)
 })
 
-router.get('/watchlist', async function (req, res) {
-    
+router.post('/removeWatchlist', async(req, res) =>{
+    let college = await uni.findOne({ College_Name: req.body.collegename })
+    let collegeid = college.id
+    let User = await user.findOneAndUpdate({ _id: req.body.user }, {$pull: {wishlist:collegeid }});
+
+    res.send(false)
+})
+
+router.get('/getWatchlist', async function (req, res) {
+
     let User = await user.findOne({ _id: req.query.user });
-    res.send(User)
+    let Unis = await uni.find({_id: {$in: User.wishlist}})
+    res.send(Unis)
+})
+
+router.get('/inWatchlist', async function (req, res) {
+    let User = await user.findOne({ _id: req.query.user });
+    let x = User.wishlist.includes(req.query.college)
+    res.send(x)
 })
 
 module.exports = router
