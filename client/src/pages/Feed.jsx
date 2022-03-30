@@ -33,7 +33,7 @@ const Feed = () => {
 			<Container maxWidth='lg' sx={{py:2}}>
 				<Stack>
 					<Typography variant='h4' align='center'>
-						Announcements
+						News Feed
 					</Typography>
 					{news[0].articles.map(value =>{
 						return(
