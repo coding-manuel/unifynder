@@ -8,7 +8,7 @@ var authRoutes = require('./routes/authRoutes')
 var universityRoutes = require('./routes/universityRoutes')
 var userRoutes = require('./routes/userRoutes')
 
-const { user, uni} = require('./schemas/data');
+const { user, uni,comment} = require('./schemas/data');
 
 const port = 8000;
 

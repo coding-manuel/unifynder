@@ -29,8 +29,29 @@ const registerschema = new schema({
     },
     wishlist: [{
         type: String
+    }],
+    docs: [{
+        url: String,
+        filename: String
+        
     }]
+
 })
+
+const commentschema = new schema({
+    body: String,
+    rating: Number
+
+})
+const comment = mongoose.model('comment', commentschema)
+
+/*const docschema = new schema({
+    body: String,
+    rating: Number
+
+})
+const doc = mongoose.model('doc', docschema)*/
+
 
 const unischema = new schema({
     College_Name: String,
@@ -54,7 +75,13 @@ const unischema = new schema({
     Average_Fees: Number,
     Cutoff_Round_One: Number,
     Cutoff_Round_Two: Number,
-    Images: String
+    Images: String,
+    comments: [
+        {
+            type: schema.Types.ObjectId,
+            ref:'comment'
+        }
+    ]
 })
 
 const wlschema = new schema({
@@ -63,6 +90,8 @@ const wlschema = new schema({
         type: String
     }
 })
+
+
 
 const user = mongoose.model('user', registerschema);
 
@@ -81,4 +110,5 @@ exports.user = user;
 exports.validate = validateUser;
 exports.uni = uni;
 exports.watchlist = watchlist;
+exports.comment=comment
 

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {user, uni} = require('../schemas/data');
+const {user, uni, comment} = require('../schemas/data');
 
 var categories = require('../filter')
 
@@ -82,6 +82,20 @@ router.post('/getSearch', async function (req, res){
     const colleges = await uni.find(query).sort({score: {$meta: 'textScore'}}).limit(4)
 
     res.send(colleges)
+})
+
+router.post('/comment', async function (req, res) {
+    const college = uni.find({ College_Name: req.body.College_Name });
+    const coment = new comment( 
+        {
+            body: req.body.commentbody,
+            rating: req.body.rating
+        }
+    )
+    college.comments.push(coment);
+    await coment.save();
+    await college.save();
+    res.send(college);
 })
 
 module.exports = router
