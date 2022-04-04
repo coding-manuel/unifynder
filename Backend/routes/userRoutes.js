@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const methodOverride = require("method-override");
+var multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 const { user, uni, watchlist } = require('../schemas/data');
 router.use(methodOverride('_method'))
@@ -67,6 +70,18 @@ router.get('/inWatchlist', async function (req, res) {
     let User = await user.findOne({ _id: req.query.user });
     let x = User.wishlist.includes(req.query.college)
     res.send(x)
+})
+
+router.post('/docs',upload.array('docs'), async function (req, res) {
+  
+    const User = await user.findOne({ name: req.body.name })
+    User.docs = req.files.map(f => ({ url: f.path, filename: f.filename }))
+    User.save();
+
+    res.end("Request processed successfully...\n");
+
+  
+
 })
 
 module.exports = router
