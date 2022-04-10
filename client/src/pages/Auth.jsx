@@ -159,7 +159,7 @@ export default function Auth() {
 						</form>
 					</Paper>
 					{isSignUp === true ? (
-						<Typography py={1} variant='subtitle1'>
+						<Typography py={1} variant='subtitle2'>
 							Already a member?
 							<Link
 								sx={{ px: '4px', cursor: 'pointer' }}
@@ -172,7 +172,7 @@ export default function Auth() {
 							</Link>
 						</Typography>
 					) : (
-						<Typography py={1} variant='subtitle1'>
+						<Typography py={1} variant='subtitle2'>
 							Not a member?
 							<Link
 								sx={{ px: '4px', cursor: 'pointer' }}

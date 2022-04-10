@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
         User.password = await bcrypt.hash(User.password, salt);
         await User.save();
 
-        res.send(User);
+        res.send(User._id);
     }
 });
 

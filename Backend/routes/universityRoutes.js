@@ -85,17 +85,7 @@ router.post('/getSearch', async function (req, res){
 })
 
 router.post('/comment', async function (req, res) {
-    //const college = uni.find({ College_Name: req.body.College_Name });
-    const coment = new comment( 
-        {
-            body: req.body.commentbody,
-            rating: req.body.rating
-        }
-    )
-    //college.comments.push(coment);
-    let college = await uni.findOneAndUpdate({ College_Name: req.body.College_Name }, {$push: {comments: coment }});
-    await coment.save();
-    //await college.save();
+    let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {$push: {comments: req.body.commentbody }});
     res.send(college);
 })
 

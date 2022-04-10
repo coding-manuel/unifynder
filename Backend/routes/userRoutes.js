@@ -22,24 +22,24 @@ router.post('/enterMarks', async(req, res) =>{
     res.send(User);
 })
 
-router.post('/wishlist', async function (req, res) {
-    const { wishlist } = req.body
-    const { name, username } = req.body
-    let User = await user.findOne({ email: req.body.email });
-    User.wishlist = wishlist
-    User.save();
-    res.send("wishlist updated");
-})
+// router.post('/wishlist', async function (req, res) {
+//     const { wishlist } = req.body
+//     const { name, username } = req.body
+//     let User = await user.findOne({ email: req.body.email });
+//     User.wishlist = wishlist
+//     User.save();
+//     res.send("wishlist updated");
+// })
 
 //this route has issues && old route
-router.get('/wishlist/:id', function (req, res) {
-    const id  = req.params.id;
-    const User = user.findOne({ email: req.params.id });
-    let college = User.wishlist;
-    let coll = uni.findOne({ _id: college })
-    res.send(coll.College_Name)
-    res.send("hello")
-})
+// router.get('/wishlist/:id', function (req, res) {
+//     const id  = req.params.id;
+//     const User = user.findOne({ email: req.params.id });
+//     let college = User.wishlist;
+//     let coll = uni.findOne({ _id: college })
+//     res.send(coll.College_Name)
+//     res.send("hello")
+// })
 
 //new watchlist routes
 
@@ -72,15 +72,12 @@ router.get('/inWatchlist', async function (req, res) {
     res.send(x)
 })
 
-router.post('/docs',upload.array('docs'), async function (req, res) {
-  
+router.post('/saveMarksheet', upload.array('docs'), async function (req, res) {
     const User = await user.findOne({ name: req.body.name })
     User.docs = req.files.map(f => ({ url: f.path, filename: f.filename }))
     User.save();
 
     res.end("Request processed successfully...\n");
-
-  
 
 })
 

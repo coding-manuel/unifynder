@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Card, CardContent, CardMedia, Button, Typography, Grid, Stack} from '@mui/material';
+import {Card, CardContent, CardMedia, Button, Typography, Grid, Stack, Rating} from '@mui/material';
 import FeatherIcon from 'feather-icons-react'
 import { useNavigate } from 'react-router-dom';
 
@@ -47,6 +47,7 @@ export default function UniversityCard({collegeInfo}) {
                                 <FeatherIcon size={12} icon='map-pin' />
                                 <Typography variant="subtitle2" sx={{fontSize: 12}} color="text.secondary">{collegeInfo.City + ',' + collegeInfo.State}</Typography>
                             </Stack>
+                            <Rating name="rating" value={collegeInfo.Rating} precision={0.5} readOnly />
                         </CardContent>
                     </Stack>
                 </Card>

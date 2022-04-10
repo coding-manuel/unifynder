@@ -33,25 +33,9 @@ const registerschema = new schema({
     docs: [{
         url: String,
         filename: String
-        
     }]
 
 })
-
-const commentschema = new schema({
-    body: String,
-    rating: Number
-
-})
-const comment = mongoose.model('comment', commentschema)
-
-/*const docschema = new schema({
-    body: String,
-    rating: Number
-
-})
-const doc = mongoose.model('doc', docschema)*/
-
 
 const unischema = new schema({
     College_Name: String,
@@ -76,12 +60,9 @@ const unischema = new schema({
     Cutoff_Round_One: Number,
     Cutoff_Round_Two: Number,
     Images: String,
-    comments: [
-        {
-            type: schema.Types.ObjectId,
-            ref:'comment'
-        }
-    ]
+    comments: [{
+        type: String
+    }],
 })
 
 const wlschema = new schema({
@@ -110,5 +91,4 @@ exports.user = user;
 exports.validate = validateUser;
 exports.uni = uni;
 exports.watchlist = watchlist;
-exports.comment=comment
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Grid, Button, Typography, Container, FormControl, Stack, Snackbar, IconButton } from '@mui/material'
+import {Button, Typography, Container, Input, Stack, Snackbar, IconButton } from '@mui/material'
 import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
@@ -22,6 +22,20 @@ const Profile = () => {
   const [error, setError] = useState();
   const [open, setOpen] = useState(false)
 
+  const uploadImage = (file) =>{
+    var fd = new FormData();
+    fd.append('docs', file[0]);
+    console.log(fd)
+    axios()
+    .post('/user/saveMarksheet', fd, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(res => {
+      console.log(res)
+    })
+  }
 
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -114,6 +128,13 @@ const Profile = () => {
             </Stack>
           </form>
         }
+        <label htmlFor="fileUpload">
+          <Typography sx={{marginTop: 2}} variant="h6">Upload your Marksheet</Typography>
+          <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
+          <Button sx={{marginTop: 1}} variant="contained" component="span">
+            Upload
+          </Button>
+        </label>
 				<Stack sx={{my:2}}>
 					<Stack justifyContent='space-between' alignItems='center' direction='row' sx={{width: '100%', mb: 2}}>
 						<Typography variant='h4' align='center'>

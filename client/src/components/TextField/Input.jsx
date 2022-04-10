@@ -6,20 +6,20 @@ import InputUnstyled from '@mui/base/InputUnstyled';
 
 const StyledInputElement = styled('input')(
 	({ theme }) => `
-	width: 250px;
+	width: 100%;
 	font-size: 0.875rem;
 	font-weight: 500;
 	line-height: 1.5;
 	color: #ffffff;
-	background: #545454;
+	background: #292929;
 	border: 0.2px solid transparent;
 	border-radius: 8px;
 	padding: 12px 12px;
 	transition: .1s ease-out;
 
 	&:hover {
-	  background: #4b4b4b;
-	  border: .2px solid #363636;
+		background: #242424;
+		border: 0.2px solid #242424;
 	}
 
 	&:focus {

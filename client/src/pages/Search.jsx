@@ -115,11 +115,6 @@ export default function Search() {
   const handleEligible = (value) =>{
     handleFilters(!value, 'eligible')
     setEligible(!eligible)
-    // const newFilters = {...filters}
-
-    // newFilters["eligible"] = eligible
-
-    // setFilters(newFilters)
   }
 
   function valuetext(value) {
