@@ -99,7 +99,7 @@ export default function University() {
             <Stack>
               <Stack direction='row' alignItems='center' gap={1}>
                   <FeatherIcon size={18} icon='layers' />
-                  <Typography variant="subtitle2" color="text.secondary">{uniData.Average_Fees}</Typography>
+                  <Typography variant="subtitle2" color="text.secondary">₹{Math.floor(uniData.Average_Fees).toLocaleString('en-IN')}</Typography>
                 </Stack>
               </Stack>
           </Stack>

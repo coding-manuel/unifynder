@@ -2,7 +2,6 @@ import React, {useState, useMemo, useEffect} from 'react'
 import { Route, Routes, Navigate } from 'react-router-dom'
 
 import { UserContext } from "./services/UserContext"
-import Dashboard from './pages/Dashboard'
 import Auth from './pages/Auth'
 import Feed from './pages/Feed'
 import Search from './pages/Search'
@@ -40,7 +39,6 @@ const App = () => {
 						<Route path='t=:searchterm' element={<Search />}/>
 					</Route>
 
-					<Route path='dashboard' element={<PrivateRoute><Dashboard /></PrivateRoute>} />
 					<Route path='newsfeed' element={<PrivateRoute><Feed /></PrivateRoute>} />
 					<Route path='watchlist' element={<PrivateRoute><Watchlist /></PrivateRoute>} />
 					<Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />

@@ -52,7 +52,7 @@ export default function Search() {
     .catch(err =>{
       console.error(error)
     })
-  }, [filters, page, eligible, search]);
+  }, [filters, page, search]);
 
   useEffect(() =>{
     state = state && handleFilters(state, 'State')
@@ -112,13 +112,14 @@ export default function Search() {
     setSearch(value)
   }
 
-  const handleEligible = () =>{
-    const newFilters = {...filters}
+  const handleEligible = (value) =>{
+    handleFilters(!value, 'eligible')
     setEligible(!eligible)
+    // const newFilters = {...filters}
 
-    newFilters["eligible"] = eligible
+    // newFilters["eligible"] = eligible
 
-    setFilters(newFilters)
+    // setFilters(newFilters)
   }
 
   function valuetext(value) {
@@ -173,7 +174,7 @@ export default function Search() {
           )
         })}
       <FormGroup sx={{py:1}}>
-        <FormControlLabel control={<Switch defaultChecked />} onChange={()=>{handleEligible()}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
+        <FormControlLabel control={<Switch defaultChecked />} onChange={()=>{handleEligible(eligible)}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
       </FormGroup>
       <Divider />
       <PriceSlider />

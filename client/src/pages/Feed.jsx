@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Button, Container, Typography, Stack } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
-import FeatherIcon from 'feather-icons-react'
+import axios from "axios"
 
 import NewsCard from '../components/NewsCard'
 import Layout from '../layout/Layout'
@@ -13,7 +13,7 @@ const Feed = () => {
 	var options = {
 		method: 'GET',
 		url: 'https://api.newscatcherapi.com/v2/search',
-		params: {q: 'Bitcoin', lang: 'en', sort_by: 'relevancy', page: '1'},
+		params: {q: 'Engineering || "Computer Science || India"', lang: 'en', sort_by: 'relevancy', page: '1'},
 		headers: {
 		  'x-api-key': 'BMZeTFenrPie-TLUkBSXlfBrDtreUTtH1bXH-U2vITg'
 		}
