@@ -3,6 +3,8 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 
 import { UserContext } from "./services/UserContext"
 import Auth from './pages/Auth'
+import AdminLogin from './pages/AdminLogin'
+import AdminDash from './pages/AdminDash'
 import Feed from './pages/Feed'
 import Search from './pages/Search'
 import Profile from './pages/Profile'
@@ -10,9 +12,11 @@ import Watchlist from './pages/Watchlist'
 import Homepage from './pages/Homepage.jsx'
 import University from './pages/University'
 import NotFound from './pages/NotFount'
+import AddUniversity from './components/Admin/AddUniversity'
 
 const App = () => {
 	const [user, setUser] = useState(localStorage.getItem('userID'));
+	const [admin, setAdmin] = useState(localStorage.getItem('admin'));
 
   	const value = useMemo(() => ({ user, setUser }), [user, setUser]);
 
@@ -22,8 +26,11 @@ const App = () => {
 	}, []);
 
 	const PrivateRoute = ({ children }) => {
-		console.log(user)
 		return user ? children : <Navigate to='authenticate' />
+	}
+
+	const AdminRoute = ({children}) =>{
+		return admin ? children : <Navigate to='authenticate' />
 	}
 	return (
 		<div className='App'>
@@ -33,6 +40,7 @@ const App = () => {
 					<Route path='/' exact element={<Navigate to="home" />} />
 
 					<Route path='authenticate' element={<Auth />} />
+					<Route path='adminauth' element={<AdminLogin />} />
 
 					<Route path='search' element={<Search />}>
 						<Route path='s=:state' element={<Search />}/>
@@ -42,6 +50,9 @@ const App = () => {
 					<Route path='newsfeed' element={<PrivateRoute><Feed /></PrivateRoute>} />
 					<Route path='watchlist' element={<PrivateRoute><Watchlist /></PrivateRoute>} />
 					<Route path='profile' element={<PrivateRoute><Profile /></PrivateRoute>} />
+
+					<Route path='admindash' element={<AdminRoute><AdminDash /></AdminRoute>} />
+					<Route path='adduni' element={<AdminRoute><AddUniversity /></AdminRoute>} />
 
 					<Route path='university/:id' element={<University />} />
 

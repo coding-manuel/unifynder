@@ -1,5 +1,5 @@
 import React, { useState,useContext, useEffect } from 'react'
-import { Button, Paper, Grid, Typography, Link, Stack } from '@mui/material'
+import { Button, Paper, Grid, Typography, Link, Snackbar, IconButton, Stack } from '@mui/material'
 import FeatherIcon from 'feather-icons-react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../services/axios'
@@ -9,14 +9,14 @@ import Input from '../components/TextField/Input'
 import Loader from '../components/Loader'
 import { UserContext } from '../services/UserContext'
 
-export default function Auth() {
+export default function AdminLogin() {
 	let navigate = useNavigate()
 
 	const [loader, setLoader] = useState(false)
 	const [isSignUp, setIsSignUp] = useState(true)
 	const [open, setOpen] = useState(false)
 	const [error, setError] = useState('')
-	const [username, setUsername] = useState('')
+	const [adminID, setAdminID] = useState('')
 	const [password, setPassword] = useState('')
 	const [repeatPassword, setRepeatPassword] = useState('')
 	const [name, setName] = useState('')
@@ -27,7 +27,7 @@ export default function Auth() {
 		event.preventDefault()
 		setLoader(true)
 		if (isSignUp) {
-			if ((password === '', repeatPassword === '', name === '', email === '')) {
+			if ((password === '', repeatPassword === '', name === '', email === '', adminID === '')) {
 				setLoader(false)
 				setOpen(true)
 				setError('Fill all the details')
@@ -38,16 +38,16 @@ export default function Auth() {
 			}
 			else{
 				axios()
-					.post('/auth/register', {
+					.post('/auth/adminregister', {
 						name: name,
 						email: email,
 						password: password,
+                        adminID: adminID
 					})
 					.then((res) => {
-						localStorage.setItem('userID', res.data)
-						setUser(localStorage.getItem('userID'))
+                        localStorage.setItem('admin', true)
 						setLoader(false)
-						navigate('/home')
+						navigate('/admindash')
 					})
 					.catch((error)=>{
 						setLoader(false)
@@ -61,15 +61,14 @@ export default function Auth() {
 					setError('Fill all the details')
 				}else{
 					axios()
-					.post('/auth/login', {
+					.post('/auth/adminlogin', {
 						email: email,
 						password: password,
 					})
 					.then((res) => {
-						localStorage.setItem('userID', res.data)
-						setUser(localStorage.getItem('userID'))
+                        localStorage.setItem('admin', true)
 						setLoader(false)
-						navigate('/home')
+						navigate('/admindash')
 					})
 					.catch((error)=>{
 						setLoader(false)
@@ -79,11 +78,6 @@ export default function Auth() {
 				}
 			}
 		}
-
-		useEffect(() => {
-			console.log(user)
-			return user && navigate('/dashboard')
-		}, []);
 
 		const handleClose = (event, reason) => {
 			if (reason === 'clickaway') {
@@ -148,6 +142,13 @@ export default function Auth() {
 										type='password'
 									/>
 								)}
+                                <Input
+									name='adminID'
+									label='AdminID'
+									handleChange={(event) => setAdminID(event.target.value)}
+									value={adminID}
+									type='text'
+								/>
 
 								<Button sx={{ mt: 4 }} type='submit' variant='contained' color='primary'>
 									<Stack direction='row' alignItems='center' gap={1}>
@@ -160,7 +161,7 @@ export default function Auth() {
 					</Paper>
 					{isSignUp === true ? (
 						<Typography py={1} variant='subtitle2'>
-							Already a member?
+							Already an admin?
 							<Link
 								sx={{ px: '4px', cursor: 'pointer' }}
 								underline='hover'
@@ -173,7 +174,7 @@ export default function Auth() {
 						</Typography>
 					) : (
 						<Typography py={1} variant='subtitle2'>
-							Not a member?
+							Not an admin?
 							<Link
 								sx={{ px: '4px', cursor: 'pointer' }}
 								underline='hover'

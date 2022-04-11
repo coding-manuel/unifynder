@@ -167,6 +167,18 @@ export default function University() {
                   <Typography variant="subtitle2" color="text.secondary">Hostel</Typography>
                 </Stack>
               }
+              {facilities.includes('Wifi') &&
+                <Stack direction='row' gap={2}>
+                  <FeatherIcon size={18} icon='wifi' />
+                  <Typography variant="subtitle2" color="text.secondary">WiFi</Typography>
+                </Stack>
+              }
+              {facilities.includes('Transport') &&
+                <Stack direction='row' gap={2}>
+                  <FeatherIcon size={18} icon='truck' />
+                  <Typography variant="subtitle2" color="text.secondary">Transport</Typography>
+                </Stack>
+              }
             </Stack>
           </Stack>
           <Typography variant="h5">Courses</Typography>

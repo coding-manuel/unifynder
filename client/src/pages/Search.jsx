@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
 import {AppBar, Button, Slider, Box, Divider, Pagination, Drawer, IconButton, Toolbar, Typography, Grid, Select, InputLabel, FormControl, Stack, MenuItem, FormGroup, Switch, FormControlLabel, Menu, Container} from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
 import FeatherIcon from 'feather-icons-react'
 import {Link, useParams} from 'react-router-dom'
 
