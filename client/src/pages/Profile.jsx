@@ -7,7 +7,7 @@ import { UserContext } from '../services/UserContext'
 
 import {news} from "../news"
 import NewsCard from '../components/NewsCard'
-import UniversityCard from '../components/Filter/UniversityCard'
+import InputText from '../components/TextField/Input';
 import Loader from '../components/Loader';
 
 import axios from '../services/axios'
@@ -16,6 +16,9 @@ import Layout from '../layout/Layout'
 
 const Profile = () => {
   const {user, setUser } = useContext(UserContext);
+
+  const [loader, setLoader] = useState(false);
+  const [file, setFile] = useState(null);
   const [collegeData, setCollegeData] = useState(null);
   const [userData, setUserData] = useState({});
   const [marks, setMarks] = useState(null);
@@ -23,9 +26,12 @@ const Profile = () => {
   const [open, setOpen] = useState(false)
 
   const uploadImage = (file) =>{
+    setLoader(true)
+
     var fd = new FormData();
     fd.append('docs', file[0]);
-    console.log(fd)
+    fd.append('id', user);
+
     axios()
     .post('/user/saveMarksheet', fd, {
       headers: {
@@ -33,7 +39,15 @@ const Profile = () => {
       }
     })
     .then(res => {
-      console.log(res)
+      setFile(res.data)
+      setOpen(true)
+      setError('File Uploaded Sucessfully')
+      setLoader(false)
+    })
+    .catch(err =>{
+      setOpen(true)
+      setError("Error Uploading the file")
+      setLoader(false)
     })
   }
 
@@ -63,6 +77,32 @@ const Profile = () => {
     setOpen(false)
   }
 
+  const removeImage = () => {
+    setLoader(true)
+
+    axios()
+    .post('/user/removeMarksheet', {
+        id: user
+    })
+    .then(res => {
+      setFile(res.data)
+      setOpen(true)
+      setError('File Removeds Sucessfully')
+      setLoader(false)
+    })
+    .catch(err =>{
+      setOpen(true)
+      setError("Error Uploading the file")
+      setLoader(false)
+    })
+  }
+
+  const shareFile = () => {
+    setOpen(true)
+    setError("Copied to Clipboard")
+    navigator.clipboard.writeText(file.url)
+  }
+
   useEffect(()=>{
     axios()
     .get('/user/getUser',{params: {
@@ -88,6 +128,20 @@ const Profile = () => {
 			console.log(err)
 		})
 	}, [])
+
+	useEffect(() =>{
+		axios()
+		.get('/user/getMarksheet', {params: {
+			id: user
+		}})
+		.then(res =>{
+			setFile(res.data === [] ? null : res.data[0])
+		})
+		.catch(err =>{
+			console.log(err)
+		})
+	}, [])
+
 	return (
 		<Layout>
       <Snackbar
@@ -113,29 +167,61 @@ const Profile = () => {
           <Typography variant='h4'>Hello, {userData.name}</Typography>
         </Stack>
         {userData.marks ?
-          <Typography variant='subtitle1'>Marks: {userData.marks}</Typography>:
+          <Typography sx={{marginTop: 3}} variant='subtitle1'>Marks: {userData.marks}</Typography>:
           <form onSubmit={handleSubmit}>
-            <Stack direction='row' sx={{mt:2}}>
-                <TextField
-                  id="Marks"
-                  label="Enter AIR Marks (Percentile)"
-                  value={marks}
-                  type="number"
-                  onChange={(event) => setMarks(event.target.value)}
-                  sx={{flexGrow: 1, paddingRight: 2}}
+            <Stack direction='row' sx={{mt:3}} gap={2}>
+                <InputText
+                    name='Marks'
+                    label='Enter AIR Marks (Percentile)'
+                    fullidth={true}
+                    handleChange={(event) => setMarks(event.target.value)}
+                    value={marks}
+                    type='number'
                 />
                 <Button onClick={handleSubmit} variant='contained'>Submit</Button>
             </Stack>
           </form>
         }
-        <label htmlFor="fileUpload">
-          <Typography sx={{marginTop: 2}} variant="h6">Upload your Marksheet</Typography>
-          <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
-          <Button sx={{marginTop: 1}} variant="contained" component="span">
-            Upload
-          </Button>
-        </label>
-				<Stack sx={{my:2}}>
+        {file ?
+          <Stack direction='row' alignItems='center' sx={{mt: 4}} gap={4}>
+            <Stack direction='row' gap={2} alignItems='center'>
+              <a href={file.url}>
+                <img src={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}.jpg`} style={{borderRadius: 4, cursor: 'pointer'}} width='100px' height='auto'  alt="" />
+              </a>
+            </Stack>
+            <Stack gap={2}>
+              <Typography variant="h6">{file.origname}</Typography>
+              <Stack direction='row' gap={2}>
+                <label htmlFor="fileUpload">
+                  <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
+                  <IconButton variant="contained" component="span">
+                    {loader ? <Loader /> : <FeatherIcon size={20} icon='repeat' />}
+                  </IconButton>
+                </label>
+                <IconButton variant="contained" onClick={()=>removeImage()} component="span">
+                  {loader ? <Loader /> : <FeatherIcon size={20} icon='trash' />}
+                </IconButton>
+                <IconButton variant="contained" size="small" onClick={shareFile}>
+                  <FeatherIcon size={20} icon='share-2' />
+                </IconButton>
+                <IconButton component='a' href={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}`} download='sample.PDF' variant="contained" size="small">
+                  <FeatherIcon size={20} icon='download' />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </Stack>
+          :
+          <label htmlFor="fileUpload">
+            <Stack direction='row' justifyContent='space-between' sx={{marginTop: 3}} alignItems='center'>
+              <Typography variant="h6">Upload your Marksheet</Typography>
+              <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
+              <IconButton variant="contained" component="span">
+                  {loader ? <Loader /> : <FeatherIcon size={20} icon='upload' />}
+                </IconButton>
+            </Stack>
+          </label>
+        }
+				<Stack sx={{my:4}}>
 					<Stack justifyContent='space-between' alignItems='center' direction='row' sx={{width: '100%', mb: 2}}>
 						<Typography variant='h4' align='center'>
 							News Articles
@@ -144,7 +230,7 @@ const Profile = () => {
 								See All
 						</Button>
 					</Stack>
-					{news[0].articles.map(value =>{
+					{news[0].articles.slice(0,5).map(value =>{
 						return(
 							<NewsCard value={value}/>
 						)

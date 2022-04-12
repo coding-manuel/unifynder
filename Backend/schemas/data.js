@@ -32,9 +32,30 @@ const registerschema = new schema({
     }],
     docs: [{
         url: String,
+        origname: String,
         filename: String
     }]
 
+})
+
+const adminschema = new schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 255,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 5,
+        maxlength: 300
+    }
 })
 
 const unischema = new schema({
@@ -75,6 +96,7 @@ const wlschema = new schema({
 
 
 const user = mongoose.model('user', registerschema);
+const admin = mongoose.model('admin', adminschema);
 
 function validateUser(User) {
     const Schema = {
@@ -88,6 +110,7 @@ const uni = mongoose.model('uni', unischema);
 const watchlist = mongoose.model('watchlist', wlschema);
 
 exports.user = user;
+exports.admin = admin;
 exports.validate = validateUser;
 exports.uni = uni;
 exports.watchlist = watchlist;
