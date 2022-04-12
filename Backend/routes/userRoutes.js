@@ -73,11 +73,26 @@ router.get('/inWatchlist', async function (req, res) {
 })
 
 router.post('/saveMarksheet', upload.array('docs'), async function (req, res) {
-    const User = await user.findOne({ name: req.body.name })
-    User.docs = req.files.map(f => ({ url: f.path, filename: f.filename }))
-    User.save();
+    const User = await user.findById(req.body.id)
+    User.docs = req.files.map(f => ({ url: f.path, filename: f.filename, origname: f.originalname }))
+    await User.save();
 
-    res.end("Request processed successfully...\n");
+    res.status(200).send(User.docs[0]).end();
+
+})
+
+router.post('/removeMarksheet', async function (req, res) {
+    const User = await user.findById(req.body.id)
+    User.docs = []
+    await User.save();
+
+    res.status(200).send(User.docs[0]).end();
+
+})
+
+router.get('/getMarksheet', async function (req, res) {
+    const User = await user.findById(req.query.id)
+    res.status(200).send(User.docs);
 
 })
 

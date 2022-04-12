@@ -13,6 +13,7 @@ import Homepage from './pages/Homepage.jsx'
 import University from './pages/University'
 import NotFound from './pages/NotFount'
 import AddUniversity from './components/Admin/AddUniversity'
+import EditUniversity from './components/Admin/EditUniversity'
 
 const App = () => {
 	const [user, setUser] = useState(localStorage.getItem('userID'));
@@ -53,6 +54,7 @@ const App = () => {
 
 					<Route path='admindash' element={<AdminRoute><AdminDash /></AdminRoute>} />
 					<Route path='adduni' element={<AdminRoute><AddUniversity /></AdminRoute>} />
+					<Route path='edituni' element={<AdminRoute><EditUniversity /></AdminRoute>} />
 
 					<Route path='university/:id' element={<University />} />
 

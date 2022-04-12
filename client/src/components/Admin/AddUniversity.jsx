@@ -26,18 +26,22 @@ export default function AddUniversity() {
     const [cutoff2, setCutoff2] = useState('');
     const [images, setImages] = useState('');
 
-
-
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return
         }
         setOpen(false)
-        }
+    }
 
     const submitHandler = (e) =>{
         e.preventDefault
-        console.log('submit')
+        if(collegeName === '' || campusSize === '' || students === '' || faculty === '' || established === '' || rating === 0 || university === '' || facilities === '' || city === '' || state === '' || averageFees ==='' || cutoff1 === '' || cutoff2 === '')
+        {
+            setOpen(true)
+            setError('Fill all the details')
+        }
+        else{
+        }
     }
 
     return (
@@ -90,7 +94,7 @@ export default function AddUniversity() {
                                     half={true}
                                     handleChange={(event) => setState(event.target.value)}
                                     value={state}
-                                    type='number'
+                                    type='text'
                                 />
                             </Stack>
                             <Typography variant="h6">College Information</Typography>
@@ -140,11 +144,11 @@ export default function AddUniversity() {
                                     type='number'
                                 />
                                 <Input
-                                    name='campussize'
-                                    label='Campus Size'
+                                    name='averagefees'
+                                    label='Average Fees'
                                     half={true}
-                                    handleChange={(event) => setCampusSize(event.target.value)}
-                                    value={campusSize}
+                                    handleChange={(event) => setAverageFees(event.target.value)}
+                                    value={averageFees}
                                     type='number'
                                 />
                             </Stack>
@@ -153,14 +157,14 @@ export default function AddUniversity() {
                                 label='Courses'
                                 handleChange={(event) => setCourses(event.target.value)}
                                 value={courses}
-                                type='number'
+                                type='text'
                             />
                             <Input
                                 name='Facilities'
                                 label='Facilities'
                                 handleChange={(event) => setFacilities(event.target.value)}
                                 value={facilities}
-                                type='number'
+                                type='text'
                             />
                             <Typography variant="h6">Cut-Offs</Typography>
                             <Stack direction='row' gap={1}>
@@ -181,7 +185,7 @@ export default function AddUniversity() {
                                     type='number'
                                 />
                             </Stack>
-                            <Button sx={{mt: 2}} variant="contained">
+                            <Button sx={{mt: 2}} onClick={()=>submitHandler(event)} variant="contained">
                                 Create University
                             </Button>
                         </Stack>

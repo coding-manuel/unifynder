@@ -32,6 +32,7 @@ const registerschema = new schema({
     }],
     docs: [{
         url: String,
+        origname: String,
         filename: String
     }]
 

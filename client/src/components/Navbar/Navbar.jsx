@@ -68,6 +68,7 @@ const Navbar = () => {
 				MenuListProps={{
 				'aria-labelledby': 'basic-button',
 				}}>
+					<MenuItem onClick={() => navigate("/admindash")}>Dashboard</MenuItem>
 					<MenuItem onClick={handleLogoutAdmin}>Logout</MenuItem>
 				</Menu>
 				:
