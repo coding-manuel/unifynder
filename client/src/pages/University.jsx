@@ -1,8 +1,8 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Stack, Container, Typography, Box, IconButton, List , ListItem, Table, TableCell, TableRow, TableBody, TableHead, Rating } from '@mui/material';
+import {Stack, Container, Typography, Box, IconButton, List , ListItem, Table, TableCell, TableRow, TableBody, TableHead, Rating, Tooltip, Link } from '@mui/material';
 import SnackBar from '../components/SnackBar';
 import FeatherIcon from 'feather-icons-react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import Loader from "../components/Loader"
 import Layout from '../layout/Layout'
@@ -11,6 +11,8 @@ import { UserContext } from '../services/UserContext'
 import Input from '../components/TextField/Input'
 
 export default function University() {
+  const navigate = useNavigate()
+
   const [uniData, setUniData] = useState({});
   const [courses, setCourses] = useState(null);
   const [facilities, setFacilities] = useState(null);
@@ -19,8 +21,8 @@ export default function University() {
   const [inWatchlist, setInWatchlist] = useState(false);
   const [open, setOpen] = useState(false)
 	const [error, setError] = useState('')
+
   const {user, setUser } = useContext(UserContext);
-  const container = window.document.body;
   let { id } = useParams();
 
   useEffect(()=>{
@@ -93,6 +95,10 @@ export default function University() {
     setOpen(false)
   }
 
+  const sendLogin = () => {
+    navigate("auth")
+  }
+
   return (
     <Layout>
       <SnackBar open={open} handleClose={handleClose} error={error} />
@@ -114,7 +120,11 @@ export default function University() {
                     <Typography variant="subtitle2" color="text.secondary">{uniData.University}</Typography>
                 </Stack>
               </Stack>
-              <IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton>
+              {user ? <IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton> :
+                <Tooltip title="Login to Watchlist">
+                  <IconButton><FeatherIcon icon='bookmark' /></IconButton>
+                </Tooltip>
+              }
             </Stack>
           </Stack>
           <Typography variant="h5">Overview</Typography>
@@ -215,6 +225,7 @@ export default function University() {
           <Typography variant="h5">Comments</Typography>
             {!comments ? <Loader/> :
             <Stack>
+              {user ?
               <form onSubmit={(event) => submitHandler(event)}>
                 <Input
                     name='comment'
@@ -224,7 +235,20 @@ export default function University() {
                     value={comment}
                     type='text'
                   />
-              </form>
+              </form>:
+              <Typography py={1} variant='subtitle2'>
+                <Link
+                  sx={{ pr: '8px', cursor: 'pointer' }}
+                  underline='hover'
+                  onClick={() => {
+                    sendLogin()
+                  }}
+                >
+                  Sign up
+                </Link>
+                to comment
+						</Typography>
+              }
               {comments.map((value)=>
               <Box sx={{backgroundColor: '#3a3a3a', borderRadius: 1, marginTop: 2, padding: '8px 16px'}}>
                 <Typography variant="subtitle2">{value}</Typography>

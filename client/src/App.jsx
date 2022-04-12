@@ -59,6 +59,7 @@ const App = () => {
 					<Route path='university/:id' element={<University />} />
 
 					<Route path="notfound" element={<NotFound />} />
+
 					<Route path="*" element={<Navigate to="notfound" />} />
 				</Routes>
 			</UserContext.Provider>

@@ -22,7 +22,7 @@ export default function Search() {
   const [userData, setUserData] = useState({});
   const {user, setUser } = useContext(UserContext);
   const [eligible, setEligible] = useState(false);
-  const [filters, setFilters] = useState({University: [], State: [], Search: '', eligible: eligible, user: user});
+  const [filters, setFilters] = useState({University: [], State: [], Search: '', eligible: eligible, user: user, Sort: ''});
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [uniData, setUniData] = useState([]);
@@ -49,9 +49,9 @@ export default function Search() {
       setLoader(false)
     })
     .catch(err =>{
-      console.error(error)
+      console.error(err)
     })
-  }, [filters, page, search]);
+  }, [filters, page, search, sort]);
 
   useEffect(() =>{
     state = state && handleFilters(state, 'State')
@@ -96,6 +96,7 @@ export default function Search() {
 
   const handleSortChange = (event) => {
     setSort(event.target.value);
+    handleFilters(event.target.value, 'Sort')
   };
 
   const handleFilters = (filter, category) =>{
@@ -167,9 +168,11 @@ export default function Search() {
             </>
           )
         })}
+      {user &&
       <FormGroup sx={{py:1}}>
         <FormControlLabel control={<Switch defaultChecked />} onChange={()=>{handleEligible(eligible)}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
       </FormGroup>
+      }
       <Divider />
       <PriceSlider />
     </>
@@ -284,7 +287,8 @@ export default function Search() {
                 >
                   <MenuItem value={1}>Average Fees: High to Low</MenuItem>
                   <MenuItem value={2}>Average Fees: Low to High</MenuItem>
-                  <MenuItem value={3}>Rating</MenuItem>
+                  <MenuItem value={3}>Rating: High to Low</MenuItem>
+                  <MenuItem value={3}>Rating: Low to High</MenuItem>
                 </Select>
               </FormControl>
             </Stack>

@@ -31,6 +31,7 @@ const Navbar = () => {
 
 	const handleLogoutAdmin = () =>{
 		localStorage.removeItem('admin')
+		setAdmin(null)
 		navigate('/home')
 	}
 

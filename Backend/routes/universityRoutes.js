@@ -11,6 +11,8 @@ router.get('/getUni', async(req, res) =>{
     const search = filters["Search"];
     const limit = 50
     const skip = (page - 1) * limit
+    let sort = filters['Sort'];
+    let marks
 
     if(filters["University"].length === 0){
         filters["University"] = categories.University
@@ -20,9 +22,8 @@ router.get('/getUni', async(req, res) =>{
     }
     let User = await user.findOne({ _id: filters["user"] });
 
-    let marks = User.marks
+    if(User) marks = User.marks
 
-    console.log(filters["eligible"])
     if(!filters["eligible"]){
         marks = 100
     }
@@ -38,7 +39,22 @@ router.get('/getUni', async(req, res) =>{
             }
 
             count = await uni.count(query)
-            items = await uni.find(query).sort({score: {$meta: 'textScore'}}).limit(limit).skip(skip)
+            switch (sort) {
+                case 1:
+                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Average_Fees: -1}).limit(limit).skip(skip)
+                    break;
+                case 2:
+                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Average_Fees: 1}).limit(limit).skip(skip)
+                    break;
+                case 3:
+                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Rating: -1}).limit(limit).skip(skip)
+                    break;
+                case 4:
+                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Rating: 1}).limit(limit).skip(skip)
+                    break;
+                default:
+                    items = await uni.find(query).sort({score: {$meta: 'textScore'}}).limit(limit).skip(skip)
+            }
         }else{
             query = {
                 Cutoff_Round_Two: {$lte : marks},
@@ -47,7 +63,23 @@ router.get('/getUni', async(req, res) =>{
             }
 
             count = await uni.count(query)
-            items = await uni.find(query).limit(limit).skip(skip)
+
+            switch (sort) {
+                case 1:
+                    items = await uni.find(query).sort({Average_Fees: -1}).limit(limit).skip(skip)
+                    break;
+                case 2:
+                    items = await uni.find(query).sort({Average_Fees: 1}).limit(limit).skip(skip)
+                    break;
+                case 3:
+                    items = await uni.find(query).sort({Rating: -1}).limit(limit).skip(skip)
+                    break;
+                case 4:
+                    items = await uni.find(query).sort({Rating: 1}).limit(limit).skip(skip)
+                    break;
+                default:
+                    items = await uni.find(query).limit(limit).skip(skip)
+            }
         }
 
         const pageCount = count / limit
