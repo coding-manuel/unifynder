@@ -185,7 +185,9 @@ const Profile = () => {
         {file ?
           <Stack direction='row' alignItems='center' sx={{mt: 4}} gap={4}>
             <Stack direction='row' gap={2} alignItems='center'>
-              <img src={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}.jpg`} style={{borderRadius: 4}} width='100px' height='auto'  alt="" />
+              <a href={file.url}>
+                <img src={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}.jpg`} style={{borderRadius: 4, cursor: 'pointer'}} width='100px' height='auto'  alt="" />
+              </a>
             </Stack>
             <Stack gap={2}>
               <Typography variant="h6">{file.origname}</Typography>
@@ -201,6 +203,9 @@ const Profile = () => {
                 </IconButton>
                 <IconButton variant="contained" size="small" onClick={shareFile}>
                   <FeatherIcon size={20} icon='share-2' />
+                </IconButton>
+                <IconButton component='a' href={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}`} download='sample.PDF' variant="contained" size="small">
+                  <FeatherIcon size={20} icon='download' />
                 </IconButton>
               </Stack>
             </Stack>
