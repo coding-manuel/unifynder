@@ -121,4 +121,62 @@ router.post('/comment', async function (req, res) {
     res.send(college);
 })
 
+router.post('/updateUni', async function (req, res) {
+    let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName },
+        {
+            Campus_Size: req.body.Campus_Size,
+            Total_Students: req.body.Total_Students,
+            Total_Faculty: req.body.Total_Faculty,
+            Established_Year: req.body.Established_Year,
+            Rating: req.body.Rating,
+            University: req.body.University,
+            Courses: req.body.Courses,
+            Facilities: req.body.Facilities,
+            City: req.body.City,
+            State: req.body.State,
+            Country: req.body.Country,
+            College_Type: req.body.College_Type,
+            Average_Fees: req.body.Average_Fees,
+            Cutoff_Round_One: req.body.Cutoff_Round_One,
+            Cutoff_Round_Two: req.body.Cutoff_Round_Two
+        });
+    res.send("updated");
+})
+
+router.post('/addUni', async function (req, res) {
+   
+let Uni = await uni.findOne({ College_Name: req.body.College_Name });
+    if (Uni) {
+        return res.status(400).send('Uni already exisits!');
+    } else {
+    // Check if this uni already exisits
+  
+            // Insert the new Uni if it does not exist yet
+           var Univ = new uni({
+           
+                College_Name: req.body.College_Name,
+                //Genders_Accepted: req.body.Genders_Accepted,
+                Campus_Size: req.body.Campus_Size,
+                Total_Students: req.body.Total_Students,
+                Total_Faculty: req.body.Total_Faculty,
+                Established_Year: req.body.Established_Year,
+                Rating: req.body.Rating,
+                University: req.body.University,
+                Courses: req.body.Courses,
+                Facilities: req.body.Facilities,
+                City: req.body.City,
+                State: req.body.State,
+                Country: req.body.Country,
+                College_Type: req.body.College_Type,
+                Average_Fees: req.body.Average_Fees,
+                Cutoff_Round_One: req.body.Cutoff_Round_One,
+                Cutoff_Round_Two: req.body.Cutoff_Round_Two,
+            });
+       
+            await Univ.save();
+            res.send(Univ);
+        }
+    
+})
+
 module.exports = router
