@@ -13,6 +13,7 @@ import Input from '../components/TextField/Input'
 export default function University() {
   const navigate = useNavigate()
 
+  const [admin, setAdmin] = useState(localStorage.getItem("admin"));
   const [uniData, setUniData] = useState({});
   const [courses, setCourses] = useState(null);
   const [facilities, setFacilities] = useState(null);
@@ -95,6 +96,10 @@ export default function University() {
     setOpen(false)
   }
 
+  const editUni = () =>{
+    navigate('/editUni', {state: uniData})
+  }
+
   const sendLogin = () => {
     navigate("auth")
   }
@@ -120,7 +125,8 @@ export default function University() {
                     <Typography variant="subtitle2" color="text.secondary">{uniData.University}</Typography>
                 </Stack>
               </Stack>
-              {user ? <IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton> :
+              {admin ? <IconButton onClick={editUni}><FeatherIcon icon='edit' /></IconButton> :
+               user ? <IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton> :
                 <Tooltip title="Login to Watchlist">
                   <IconButton><FeatherIcon icon='bookmark' /></IconButton>
                 </Tooltip>

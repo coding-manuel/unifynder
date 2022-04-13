@@ -1,12 +1,15 @@
-import React, {useContext, useState, useEffect} from 'react';
-import {Stack, Container, Typography, Box, IconButton, List , ListItem, Table, TableCell, TableRow, TableBody, TableHead, Rating, Button } from '@mui/material';
+import React, {useState} from 'react';
+import {Stack, Container, Typography, Button } from '@mui/material';
 import SnackBar from '../SnackBar';
-import FeatherIcon from 'feather-icons-react'
 
+import axios from "../../services/axios"
 import Layout from '../../layout/Layout'
 import Input from '../TextField/Input'
+import { useNavigate } from 'react-router-dom';
 
 export default function AddUniversity() {
+    const navigate = useNavigate()
+
     const [open, setOpen] = useState(false)
 	const [error, setError] = useState('')
 
@@ -41,6 +44,32 @@ export default function AddUniversity() {
             setError('Fill all the details')
         }
         else{
+            axios()
+            .post('/university/addUni', {
+                College_Name: collegeName,
+                Campus_Size: campusSize,
+                Total_Students: students,
+                Total_Faculty: faculty,
+                Established_Year: established,
+                Rating: rating,
+                University: university,
+                Courses: courses,
+                City: city,
+                State: state,
+                Average_Fees: averageFees,
+                Cutoff_Round_One: cutoff1,
+                Cutoff_Round_Two: cutoff2,
+                Images: images
+            })
+            .then(res => {
+                setOpen(true)
+                setError("University Made Succesfully")
+                navigate(`university/${res.data.id}`)
+            })
+            .catch(err =>{
+                setOpen(true)
+                setError("University Already Exists")
+            })
         }
     }
 
