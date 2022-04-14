@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import {Button, Typography, Container, Input, Stack, Snackbar, IconButton } from '@mui/material'
-import TextField from '@mui/material/TextField';
+import {Button, Typography, Container, Input, Stack, Snackbar, IconButton, Tooltip, Dialog, DialogActions, DialogContent, DialogContentText } from '@mui/material'
 import { Link } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import { UserContext } from '../services/UserContext'
@@ -24,6 +23,7 @@ const Profile = () => {
   const [marks, setMarks] = useState(null);
   const [error, setError] = useState();
   const [open, setOpen] = useState(false)
+  const [dopen, setDopen] = useState(false)
 
   const uploadImage = (file) =>{
     setLoader(true)
@@ -63,9 +63,9 @@ const Profile = () => {
       user: user
     })
     .then(res =>{
-      console.log(res.data)
-      setMarks(res.data)
+      setUserData(res.data)
       setOpen(true)
+      setDopen(false)
       setError("Marks Set")
     })
   }
@@ -101,6 +101,14 @@ const Profile = () => {
     setOpen(true)
     setError("Copied to Clipboard")
     navigator.clipboard.writeText(file.url)
+  }
+
+  const dialogOpen = () =>{
+    setDopen(true)
+  }
+
+  const dhandleClose = () =>{
+    setDopen(false)
   }
 
   useEffect(()=>{
@@ -162,12 +170,45 @@ const Profile = () => {
 						</React.Fragment>
 					}
 				/>
+      <Dialog
+        open={dopen}
+        onClose={dhandleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description" sx={{mb:2}}>
+            Enter your AIR Marks (Percentile)
+          </DialogContentText>
+          <InputText
+              name='Marks'
+              label='Enter AIR Marks'
+              fullidth={true}
+              handleChange={(event) => setMarks(event.target.value)}
+              value={marks}
+              type='number'
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant='text' onClick={dhandleClose}>Cancel</Button>
+          <Button variant='contained' onClick={handleSubmit} autoFocus>
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Container maxWidth='lg' sx={{py: 4}}>
         <Stack gap={2}>
           <Typography variant='h4'>Hello, {userData.name}</Typography>
         </Stack>
         {userData.marks ?
-          <Typography sx={{marginTop: 3}} variant='subtitle1'>Marks: {userData.marks}</Typography>:
+          <Stack sx={{mt:3}} direction='row' justifyContent='space-between' alignItems='center'>
+            <Typography variant='h6'>Marks: {userData.marks}</Typography>
+            <Tooltip title="Replace">
+              <IconButton onClick={dialogOpen} variant="contained" component="span">
+                <FeatherIcon size={20} icon='repeat' />
+              </IconButton>
+            </Tooltip>
+          </Stack>:
           <form onSubmit={handleSubmit}>
             <Stack direction='row' sx={{mt:3}} gap={2}>
                 <InputText
@@ -194,19 +235,27 @@ const Profile = () => {
               <Stack direction='row' gap={2}>
                 <label htmlFor="fileUpload">
                   <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
-                  <IconButton variant="contained" component="span">
-                    {loader ? <Loader /> : <FeatherIcon size={20} icon='repeat' />}
-                  </IconButton>
+                  <Tooltip title="Replace">
+                    <IconButton variant="contained" component="span">
+                      {loader ? <Loader /> : <FeatherIcon size={20} icon='repeat' />}
+                    </IconButton>
+                  </Tooltip>
                 </label>
-                <IconButton variant="contained" onClick={()=>removeImage()} component="span">
-                  {loader ? <Loader /> : <FeatherIcon size={20} icon='trash' />}
-                </IconButton>
-                <IconButton variant="contained" size="small" onClick={shareFile}>
-                  <FeatherIcon size={20} icon='share-2' />
-                </IconButton>
-                <IconButton component='a' href={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}`} download='sample.PDF' variant="contained" size="small">
-                  <FeatherIcon size={20} icon='download' />
-                </IconButton>
+                <Tooltip title="Delete">
+                  <IconButton variant="contained" onClick={()=>removeImage()} component="span">
+                    {loader ? <Loader /> : <FeatherIcon size={20} icon='trash' />}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Share">
+                  <IconButton variant="contained" size="small" onClick={shareFile}>
+                    <FeatherIcon size={20} icon='share-2' />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Download">
+                  <IconButton component='a' href={`https://res.cloudinary.com/youreng/image/upload/v1649772483/${file.filename}`} download='sample.PDF' variant="contained" size="small">
+                    <FeatherIcon size={20} icon='download' />
+                  </IconButton>
+                </Tooltip>
               </Stack>
             </Stack>
           </Stack>
@@ -215,9 +264,11 @@ const Profile = () => {
             <Stack direction='row' justifyContent='space-between' sx={{marginTop: 3}} alignItems='center'>
               <Typography variant="h6">Upload your Marksheet</Typography>
               <Input accept="image/*" id="fileUpload" type="file" onChange={(event)=>{uploadImage(event.target.files)}} sx={{display: 'none'}}/>
-              <IconButton variant="contained" component="span">
+              <Tooltip title="Upload">
+                <IconButton variant="contained" component="span">
                   {loader ? <Loader /> : <FeatherIcon size={20} icon='upload' />}
                 </IconButton>
+              </Tooltip>
             </Stack>
           </label>
         }

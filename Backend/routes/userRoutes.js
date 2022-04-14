@@ -15,11 +15,10 @@ router.get('/getUser', async (req, res) =>{
 })
 
 router.post('/enterMarks', async(req, res) =>{
-    console.log()
     let User = await user.findOne({ _id: req.body.user });
     User.marks = req.body.marks
     User.save();
-    res.send(User);
+    res.status(200).send(User);
 })
 
 // router.post('/wishlist', async function (req, res) {

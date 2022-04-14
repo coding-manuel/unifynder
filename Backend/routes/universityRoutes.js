@@ -41,16 +41,16 @@ router.get('/getUni', async(req, res) =>{
             count = await uni.count(query)
             switch (sort) {
                 case 1:
-                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Average_Fees: -1}).limit(limit).skip(skip)
+                    items = await uni.find(query).sort({Average_Fees: -1}).limit(limit).skip(skip)
                     break;
                 case 2:
-                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Average_Fees: 1}).limit(limit).skip(skip)
+                    items = await uni.find(query).sort({Average_Fees: 1}).limit(limit).skip(skip)
                     break;
                 case 3:
-                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Rating: -1}).limit(limit).skip(skip)
+                    items = await uni.find(query).sort({Rating: -1}).limit(limit).skip(skip)
                     break;
                 case 4:
-                    items = await uni.find(query).sort({score: {$meta: 'textScore'}, Rating: 1}).limit(limit).skip(skip)
+                    items = await uni.find(query).sort({Rating: 1}).limit(limit).skip(skip)
                     break;
                 default:
                     items = await uni.find(query).sort({score: {$meta: 'textScore'}}).limit(limit).skip(skip)
@@ -121,8 +121,15 @@ router.post('/comment', async function (req, res) {
     res.send(college);
 })
 
+router.post('/deletecomment', async function (req, res) {
+    let comments = req.body.value
+    comments.splice(req.body.index, 1)
+    let univ = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {comments: comments});
+    res.send(univ);
+})
+
 router.post('/updateUni', async function (req, res) {
-    let college = await uni.findOneAndUpdate({ College_Name: req.body.College_Name },
+    await uni.findOneAndUpdate({ College_Name: req.body.College_Name },
         {
             College_Name: req.body.College_Name,
             Campus_Size: req.body.Campus_Size,
@@ -140,6 +147,7 @@ router.post('/updateUni', async function (req, res) {
             Cutoff_Round_Two: req.body.Cutoff_Round_Two,
             Images: req.body.Images
         });
+
     res.send("updated");
 })
 

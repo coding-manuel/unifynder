@@ -26,6 +26,14 @@ var th = createTheme({
 		},
 	},
 	components: {
+		MuiDialog:{
+			styleOverrides:{
+				paper:{
+					backgroundImage: 'none',
+					backgroundColor: '#1F1F1F'
+				}
+			}
+		},
 		MuiAccordion:{
 			styleOverrides:{
 				root:{

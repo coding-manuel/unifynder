@@ -65,6 +65,7 @@ export default function EditUniversity() {
           .then(res => {
               setOpen(true)
               setError("University Edit Succesfully")
+              navigate(`/university/${state._id}`)
           })
           .catch(err =>{
               setOpen(true)

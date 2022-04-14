@@ -64,7 +64,7 @@ export default function AddUniversity() {
             .then(res => {
                 setOpen(true)
                 setError("University Made Succesfully")
-                navigate(`university/${res.data.id}`)
+                navigate(`/university/${res.data.id}`)
             })
             .catch(err =>{
                 setOpen(true)

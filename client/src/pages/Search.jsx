@@ -288,7 +288,7 @@ export default function Search() {
                   <MenuItem value={1}>Average Fees: High to Low</MenuItem>
                   <MenuItem value={2}>Average Fees: Low to High</MenuItem>
                   <MenuItem value={3}>Rating: High to Low</MenuItem>
-                  <MenuItem value={3}>Rating: Low to High</MenuItem>
+                  <MenuItem value={4}>Rating: Low to High</MenuItem>
                 </Select>
               </FormControl>
             </Stack>

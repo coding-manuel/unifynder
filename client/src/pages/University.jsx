@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Stack, Container, Typography, Box, IconButton, List , ListItem, Table, TableCell, TableRow, TableBody, TableHead, Rating, Tooltip, Link } from '@mui/material';
+import {Stack, Container, Typography, Dialog, DialogActions, DialogContent, Button, DialogContentText, IconButton, List , ListItem, Table, TableCell, TableRow, TableBody, TableHead, Rating, Tooltip, Link } from '@mui/material';
 import SnackBar from '../components/SnackBar';
 import FeatherIcon from 'feather-icons-react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -21,6 +21,7 @@ export default function University() {
   const [comment, setComment] = useState('');
   const [inWatchlist, setInWatchlist] = useState(false);
   const [open, setOpen] = useState(false)
+  const [dopen, setDopen] = useState(false)
 	const [error, setError] = useState('')
 
   const {user, setUser } = useContext(UserContext);
@@ -85,7 +86,6 @@ export default function University() {
     .then(res => {
       setUniData(res.data)
       setComments(res.data.comments)
-      console.log(res.data.comments)
     })
   }
 
@@ -101,12 +101,51 @@ export default function University() {
   }
 
   const sendLogin = () => {
-    navigate("auth")
+    navigate("/authenticate")
   }
+
+  const deleteComment = (index) =>{
+    console.log(comments)
+    axios()
+    .post("/university/deletecomment", {
+      collegeName: uniData.College_Name,
+      value: comments,
+      index: index
+    })
+    .then(res =>{
+      setComments(res.data.comments)
+    })
+  }
+
+  const dhandleClickOpen = () => {
+    setDopen(true);
+  };
+
+  const dhandleClose = () => {
+    setDopen(false);
+  };
 
   return (
     <Layout>
       <SnackBar open={open} handleClose={handleClose} error={error} />
+      <Dialog
+        open={dopen}
+        onClose={dhandleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this comment?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='text' onClick={dhandleClose}>Cancel</Button>
+          <Button variant='contained' onClick={() => deleteComment(index)} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Container maxWidth='lg'>
         {!courses ? <Loader/> :
         <Stack direction='column' justifyContent='center' gap={2} my={3}>
@@ -125,8 +164,8 @@ export default function University() {
                     <Typography variant="subtitle2" color="text.secondary">{uniData.University}</Typography>
                 </Stack>
               </Stack>
-              {admin ? <IconButton onClick={editUni}><FeatherIcon icon='edit' /></IconButton> :
-               user ? <IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton> :
+              {admin ? <Tooltip title="Edit" arrow><IconButton onClick={editUni}><FeatherIcon icon='edit-2' /></IconButton></Tooltip> :
+               user ? <Tooltip title="Bookmark" arrow><IconButton onClick={addWatchlist} variant={inWatchlist ? 'off' : 'none'}><FeatherIcon icon='bookmark' /></IconButton></Tooltip> :
                 <Tooltip title="Login to Watchlist">
                   <IconButton><FeatherIcon icon='bookmark' /></IconButton>
                 </Tooltip>
@@ -231,34 +270,38 @@ export default function University() {
           <Typography variant="h5">Comments</Typography>
             {!comments ? <Loader/> :
             <Stack>
-              {user ?
-              <form onSubmit={(event) => submitHandler(event)}>
-                <Input
-                    name='comment'
-                    label='Share your thoughts'
-                    fullidth={true}
-                    handleChange={(event) => setComment(event.target.value)}
-                    value={comment}
-                    type='text'
-                  />
-              </form>:
-              <Typography py={1} variant='subtitle2'>
-                <Link
-                  sx={{ pr: '8px', cursor: 'pointer' }}
-                  underline='hover'
-                  onClick={() => {
-                    sendLogin()
-                  }}
-                >
-                  Sign up
-                </Link>
-                to comment
-						</Typography>
-              }
-              {comments.map((value)=>
-              <Box sx={{backgroundColor: '#3a3a3a', borderRadius: 1, marginTop: 2, padding: '8px 16px'}}>
-                <Typography variant="subtitle2">{value}</Typography>
-              </Box>
+              {!admin && (user ?
+                <form onSubmit={(event) => submitHandler(event)}>
+                  <Input
+                      name='comment'
+                      label='Share your thoughts'
+                      fullidth={true}
+                      handleChange={(event) => setComment(event.target.value)}
+                      value={comment}
+                      type='text'
+                    />
+                </form>:
+                <Typography py={1} variant='subtitle2'>
+                  <Link
+                    sx={{ pr: '8px', cursor: 'pointer' }}
+                    underline='hover'
+                    onClick={() => {
+                      sendLogin()
+                    }}
+                  >
+                    Sign up
+                  </Link>
+                  to comment
+                </Typography>
+              )}
+              {comments.map((value, index)=>
+                <Stack direction='row' gap={4} justifyContent='space-between' alignItems='center' sx={{backgroundColor: '#3a3a3a', borderRadius: 1, marginTop: 2, padding: '8px 16px'}}>
+                  <Typography variant="subtitle2">{value}</Typography>
+                  {admin &&
+                  <Tooltip title="Delete Comment">
+                    <IconButton onClick={dhandleClickOpen}><FeatherIcon size={16} icon='trash' /></IconButton>
+                  </Tooltip>}
+                </Stack>
               )}
             </Stack>
             }

@@ -47,7 +47,7 @@ export default function AdminLogin() {
 					.then((res) => {
                         localStorage.setItem('admin', true)
 						setLoader(false)
-						navigate('/home')
+						navigate('/admindash')
 					})
 					.catch((error)=>{
 						setLoader(false)
@@ -68,7 +68,7 @@ export default function AdminLogin() {
 					.then((res) => {
                         localStorage.setItem('admin', true)
 						setLoader(false)
-						navigate('/home')
+						navigate('/admindash')
 					})
 					.catch((error)=>{
 						setLoader(false)
