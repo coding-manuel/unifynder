@@ -54,6 +54,7 @@ export default function EditUniversity() {
               Established_Year: established,
               Rating: rating,
               University: university,
+              Facilities: facilities,
               Courses: courses,
               City: city,
               State: State,

@@ -40,6 +40,7 @@ const Input = ({ name, handleChange, value, label, autoFocus, type, half }) => {
 	return (
 		<Grid item xs={12} sm={half ? 6 : 12}>
 			<CustomInput
+				autoComplete='off'
 				name={name}
 				placeholder={label}
 				variant='outlined'

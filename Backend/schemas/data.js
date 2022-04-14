@@ -67,12 +67,8 @@ const unischema = new schema({
     Established_Year: Number,
     Rating: Number,
     University: String,
-    Courses: [{
-        type: String
-    }],
-    Facilities: [{
-        type: String
-    }],
+    Courses: String,
+    Facilities: String,
     City: String,
     State: String,
     Country: String,

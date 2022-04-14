@@ -23,6 +23,7 @@ export default function University() {
   const [open, setOpen] = useState(false)
   const [dopen, setDopen] = useState(false)
 	const [error, setError] = useState('')
+  const [index, setIndex] = useState(null)
 
   const {user, setUser } = useContext(UserContext);
   let { id } = useParams();
@@ -41,13 +42,13 @@ export default function University() {
 
   useEffect(()=>{
     if(uniData.Courses){
-      setCourses(uniData.Courses[0].split(', '))
-      setFacilities(uniData.Facilities[0].split(', '))
+      setCourses(uniData.Courses.split(', '))
+      setFacilities(uniData.Facilities.split(', '))
     }
   }, [uniData])
 
   useEffect(()=>{
-    axios()
+    !admin && axios()
     .get('/user/inWatchlist',{params: {
       college: id,
       user: user
@@ -104,8 +105,7 @@ export default function University() {
     navigate("/authenticate")
   }
 
-  const deleteComment = (index) =>{
-    console.log(comments)
+  const deleteComment = () =>{
     axios()
     .post("/university/deletecomment", {
       collegeName: uniData.College_Name,
@@ -115,10 +115,12 @@ export default function University() {
     .then(res =>{
       setComments(res.data.comments)
     })
+    setDopen(false)
   }
 
-  const dhandleClickOpen = () => {
+  const dhandleClickOpen = (index) => {
     setDopen(true);
+    setIndex(index)
   };
 
   const dhandleClose = () => {
@@ -141,7 +143,7 @@ export default function University() {
         </DialogContent>
         <DialogActions>
           <Button variant='text' onClick={dhandleClose}>Cancel</Button>
-          <Button variant='contained' onClick={() => deleteComment(index)} autoFocus>
+          <Button variant='contained' onClick={deleteComment} autoFocus>
             Yes
           </Button>
         </DialogActions>
@@ -299,7 +301,7 @@ export default function University() {
                   <Typography variant="subtitle2">{value}</Typography>
                   {admin &&
                   <Tooltip title="Delete Comment">
-                    <IconButton onClick={dhandleClickOpen}><FeatherIcon size={16} icon='trash' /></IconButton>
+                    <IconButton onClick={() => dhandleClickOpen(index)}><FeatherIcon size={16} icon='trash' /></IconButton>
                   </Tooltip>}
                 </Stack>
               )}

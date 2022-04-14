@@ -54,6 +54,7 @@ export default function AddUniversity() {
                 Rating: rating,
                 University: university,
                 Courses: courses,
+                Facilities: facilities,
                 City: city,
                 State: state,
                 Average_Fees: averageFees,
@@ -64,7 +65,7 @@ export default function AddUniversity() {
             .then(res => {
                 setOpen(true)
                 setError("University Made Succesfully")
-                navigate(`/university/${res.data.id}`)
+                navigate(`/university/${res.data._id}`)
             })
             .catch(err =>{
                 setOpen(true)
