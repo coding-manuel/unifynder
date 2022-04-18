@@ -5,6 +5,30 @@ const {user, uni, comment} = require('../schemas/data');
 
 var categories = require('../filter')
 
+//var Filter = require('bad-words'),
+//    filter = new Filter();
+//filter.addWords('fuck', 'shit', 'shitty',);
+    
+var BadLanguageFilter = require('bad-language-filter');
+var filter = new BadLanguageFilter();
+var badwords = require('../badwords.json').badwords;
+var TextFinder = require('../textfinder');
+
+function BadLanguageFilter() {
+	this.textfinder = new TextFinder(badwords);
+}
+
+// Check if any bad words is contained in content
+BadLanguageFilter.prototype.contains = function(content) {
+	return this.textfinder.contains(content);
+};
+
+var Filter = require('bad-words'),
+    filt = new Filter();
+
+
+
+
 router.get('/getUni', async(req, res) =>{
     const page = req.query.page
     const filters = JSON.parse(req.query.filters)
@@ -122,8 +146,22 @@ router.post('/getSearch', async function (req, res){
 })
 
 router.post('/comment', async function (req, res) {
-    let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {$push: {comments: req.body.commentbody }});
-    res.send(college);
+    let x = req.body.commentbody;
+   
+    //if (x.includes(badwords)) {
+     //   res.send("profanity used, cant accept the comment");
+    //}
+    let xx = filt.clean(req.body.commentbody);
+    if (filt.clean(req.body.commentbody)) {
+        res.send("profanity used, cant accept the comment");
+    }
+    else {
+
+        // else{
+        let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, { $push: { comments: req.body.commentbody } });
+        res.send(college);
+    }
+    //}
 })
 
 router.post('/deletecomment', async function (req, res) {
@@ -132,6 +170,8 @@ router.post('/deletecomment', async function (req, res) {
     let univ = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {comments: comments});
     res.send(univ);
 })
+
+
 
 router.post('/updateUni', async function (req, res) {
     await uni.findOneAndUpdate({ College_Name: req.body.College_Name },
