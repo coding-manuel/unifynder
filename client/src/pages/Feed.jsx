@@ -13,19 +13,19 @@ const Feed = () => {
 	var options = {
 		method: 'GET',
 		url: 'https://api.newscatcherapi.com/v2/search',
-		params: {q: 'Engineering || "Computer Science || India"', lang: 'en', sort_by: 'relevancy', page: '1'},
+		params: {q: 'Engineering && India"', lang: 'en', sort_by: 'relevancy', page: '1'},
 		headers: {
 		  'x-api-key': 'BMZeTFenrPie-TLUkBSXlfBrDtreUTtH1bXH-U2vITg'
 		}
 	};
 
-	// useEffect(() => {
-	// 	axios.request(options).then(function (response) {
-	// 		console.log(response.data);
-	// 	}).catch(function (error) {
-	// 		console.error(error);
-	// 	});
-	// }, []);
+	useEffect(() => {
+		axios.request(options).then(function (response) {
+			console.log(response.data);
+		}).catch(function (error) {
+			console.error(error);
+		});
+	}, []);
 
 
 	return (

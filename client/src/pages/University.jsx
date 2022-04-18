@@ -330,8 +330,12 @@ export default function University() {
                 )}
               </Stack>
             </Stack>
-            <Typography variant="h5">About {uniData.College_Name}</Typography>
-            <Youtube url={uniData.Videos} />
+            {uniData.Videos &&
+            <Stack gap={2}>
+              <Typography variant="h5">About {uniData.College_Name}</Typography>
+              <Youtube url={uniData.Videos} />
+            </Stack>
+            }
             <Typography variant="h5">Courses</Typography>
             <Stack direction="row" alignItems="center" gap={2} mx={2}>
               <List sx={{ listStyleType: "disc" }}>

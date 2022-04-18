@@ -26,7 +26,8 @@ const categories = {
         'Gujarat Technological University, Ahmedabad',
         'APJ Abdul Kalam Technological University, Thiruvananthapuram',
         'Guru Gobind Singh Indraprastha University, Delhi',
-        'SRM Institute of Science and Technology, Chennai'
+        'SRM Institute of Science and Technology, Chennai',
+        ''
     ],
     'State': [
         'Maharashtra',
@@ -65,7 +66,7 @@ const categories = {
         'Andaman and Nicobar Islands',
         'Dadra and Nagar Haveli',
         'MBA Collaboration with University of Warwick UK'
-    ],
+        ],
     "Courses":["B.Tech","M.Tech","B.Sc","BA","MA","MBA","MBBS","Diploma","LLB", "B.Com"]
 }
 module.exports = categories

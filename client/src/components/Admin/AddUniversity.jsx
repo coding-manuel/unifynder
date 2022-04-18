@@ -28,6 +28,7 @@ export default function AddUniversity() {
     const [cutoff1, setCutoff1] = useState('');
     const [cutoff2, setCutoff2] = useState('');
     const [images, setImages] = useState('');
+    const [videos, setVideos] = useState('');
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -60,7 +61,8 @@ export default function AddUniversity() {
                 Average_Fees: averageFees,
                 Cutoff_Round_One: cutoff1,
                 Cutoff_Round_Two: cutoff2,
-                Images: images
+                Images: images,
+                Videos: videos
             })
             .then(res => {
                 setOpen(true)
@@ -106,6 +108,14 @@ export default function AddUniversity() {
                                 fullidth={true}
                                 handleChange={(event) => setImages(event.target.value)}
                                 value={images}
+                                type='text'
+                            />
+                            <Input
+                                name='videos'
+                                label='Video Link'
+                                fullidth={true}
+                                handleChange={(event) => setVideos(event.target.value)}
+                                value={videos}
                                 type='text'
                             />
                             <Typography variant="h6">Location</Typography>

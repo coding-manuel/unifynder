@@ -29,6 +29,7 @@ export default function EditUniversity() {
   const [cutoff1, setCutoff1] = useState(state.Cutoff_Round_One);
   const [cutoff2, setCutoff2] = useState(state.Cutoff_Round_Two);
   const [images, setImages] = useState(state.Images);
+  const [videos, setVideos] = useState(state.Videos);
 
   const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
@@ -61,7 +62,8 @@ export default function EditUniversity() {
               Average_Fees: averageFees,
               Cutoff_Round_One: cutoff1,
               Cutoff_Round_Two: cutoff2,
-              Images: images
+              Images: images,
+              Videos: videos
           })
           .then(res => {
               setOpen(true)
@@ -109,6 +111,14 @@ export default function EditUniversity() {
                               value={images}
                               type='text'
                           />
+                          <Input
+                                name='videos'
+                                label='Video Link'
+                                fullidth={true}
+                                handleChange={(event) => setVideos(event.target.value)}
+                                value={videos}
+                                type='text'
+                            />
                           <Typography variant="h6">Location</Typography>
                           <Stack direction='row' gap={1}>
                               <Input

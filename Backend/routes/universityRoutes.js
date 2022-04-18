@@ -26,9 +26,6 @@ BadLanguageFilter.prototype.contains = function(content) {
 var Filter = require('bad-words'),
     filt = new Filter();
 
-
-
-
 router.get('/getUni', async(req, res) =>{
     const page = req.query.page
     const filters = JSON.parse(req.query.filters)
@@ -168,8 +165,8 @@ router.post('/comment', async function (req, res) {
     }
     else if (wordCount < 7 || sizex < 15)
     {
-                res.status(400).send("Need atleast 7 words and 15 characters for a genuine review, please update the comment");
-        }
+        res.status(400).send("Need atleast 7 words and 15 characters for a genuine review");
+    }
     else {
         let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, { $push: { comments: req.body.commentbody } });
         res.send(college);
