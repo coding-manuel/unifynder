@@ -202,7 +202,8 @@ router.post('/updateUni', async function (req, res) {
             Average_Fees: req.body.Average_Fees,
             Cutoff_Round_One: req.body.Cutoff_Round_One,
             Cutoff_Round_Two: req.body.Cutoff_Round_Two,
-            Images: req.body.Images
+            Images: req.body.Images,
+            Videos: req.body.Videos
         });
 
     res.send("updated");

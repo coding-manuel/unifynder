@@ -80,6 +80,7 @@ const unischema = new schema({
     comments: [{
         type: String
     }],
+    Videos: [{ type: String}]
 })
 
 const wlschema = new schema({
