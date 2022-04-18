@@ -88,6 +88,10 @@ export default function University() {
       setUniData(res.data)
       setComments(res.data.comments)
     })
+    .catch(({response}) =>{
+      setOpen(true)
+      setError(response.data)
+    })
   }
 
   const handleClose = (event, reason) => {

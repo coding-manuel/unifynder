@@ -22,12 +22,14 @@ export default function Search() {
   const [userData, setUserData] = useState({});
   const {user, setUser } = useContext(UserContext);
   const [eligible, setEligible] = useState(false);
-  const [filters, setFilters] = useState({University: [], State: [], Search: '', eligible: eligible, user: user, Sort: ''});
+  const [filters, setFilters] = useState({University: [], State: [], Search: '', Courses: '', eligible: eligible, user: user, Sort: '', rating: [1,5], fees: [1,230000]});
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [uniData, setUniData] = useState([]);
   const [sort, setSort] = useState('');
   const [search, setSearch] = useState('');
+  const [rating, setRating] = useState([0, 5]);
+  const [fees, setFees] = useState([0, 230000]);
   const [loader, setLoader] = useState(true);
 
   let { state, searchterm } = useParams();
@@ -117,48 +119,84 @@ export default function Search() {
     setEligible(!eligible)
   }
 
-  function valuetext(value) {
-    return `${value}°C`;
+  const handleRating = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    handleFilters(newValue, 'rating')
+    setRating(newValue)
+  };
+
+  const changeRating = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    if(newValue.every((val, index) => val === rating[index])){
+      return;
+    }
+    setRating(newValue)
+  };
+
+  const handleFees = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    handleFilters(newValue, 'fees')
+    setFees(newValue)
+  };
+
+  const changeFees = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+    if(newValue.every((val, index) => val === fees[index])){
+      return;
+    }
+    setFees(newValue)
+  };
+
+  function valueLabelFormat(value) {
+    const units = ['', 'L'];
+
+    let unitIndex = 0;
+    let scaledValue = value;
+
+    while (scaledValue >= 99999 && unitIndex < units.length - 1) {
+      unitIndex += 1;
+      scaledValue /= 100000;
+      scaledValue = scaledValue.toFixed(2)
+    }
+
+    return `${scaledValue} ${units[unitIndex]}`;
   }
 
-  const PriceSlider = () => {
+  function calculateFees(value) {
+    const units = ['', 'L'];
 
-    const minDistance = 10;
+    let unitIndex = 0;
+    let scaledValue = value;
 
-    const [rating, setRating] = React.useState([1, 3]);
+    while (scaledValue >= 99999 && unitIndex < units.length - 1) {
+      unitIndex += 1;
+      scaledValue /= 100000;
+      scaledValue = scaledValue.toFixed(2)
+    }
 
-    const handleChange = (event, newValue, activeThumb) => {
-      if (!Array.isArray(newValue)) {
-        return;
-      }
-
-      setRating(newValue)
-    };
-
-    return (
-      <Stack sx={{mx:3, my:2}} gap={2}>
-        <Typography variant='subtitle1'>College Rating</Typography>
-        <Slider
-          getAriaLabel={() => 'Minimum distance'}
-          value={rating}
-          onChange={handleChange}
-          valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
-          min={0}
-          step={0.2}
-          size='small'
-          max={5}
-          disableSwap
-        />
-      </Stack>
-    )
+    return `${scaledValue} ${units[unitIndex]}`;
   }
+
 
   const drawer = (
     <>
       <Toolbar sx={{padding: '0 2px'}}>
         <Logo/>
       </Toolbar>
+      <Divider />
+      {user &&
+      <FormGroup sx={{py:1}}>
+        <FormControlLabel control={<Switch defaultChecked />} onChange={()=>{handleEligible(eligible)}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
+      </FormGroup>
+      }
       <Divider />
       {Object.entries(categories).map((value) => {
           return (
@@ -168,13 +206,50 @@ export default function Search() {
             </>
           )
         })}
-      {user &&
-      <FormGroup sx={{py:1}}>
-        <FormControlLabel control={<Switch defaultChecked />} onChange={()=>{handleEligible(eligible)}} checked={eligible} label={<Typography variant='subtitle1'>Am I eligible?</Typography>} />
-      </FormGroup>
-      }
       <Divider />
-      <PriceSlider />
+      <Stack sx={{mx:3, my:2}}>
+        <Typography variant='subtitle1'>College Rating</Typography>
+        <Slider
+          getAriaLabel={() => 'Minimum distance'}
+          value={rating}
+          onChange={changeRating}
+          onChangeCommitted={handleRating}
+          valueLabelDisplay="auto"
+          min={0}
+          max={5}
+          size='small'
+          disableSwap
+          sx={{width: 'auto', mx: '4px', mt: 1}}
+        />
+        <Stack justifyContent='space-between' direction='row'>
+          <Typography variant="subtitle2">{rating[0]}</Typography>
+          <Typography variant="subtitle2">{rating[1]}</Typography>
+        </Stack>
+      </Stack>
+      <Divider />
+      <Stack sx={{mx:3, my:2}}>
+        <Typography variant='subtitle1'>Average Fees</Typography>
+        <Slider
+          getAriaLabel={() => 'Minimum distance'}
+          value={fees}
+          onChange={changeFees}
+          onChangeCommitted={handleFees}
+          valueLabelDisplay="auto"
+          getAriaValueText={valueLabelFormat}
+          valueLabelFormat={valueLabelFormat}
+          min={0}
+          step={0.2}
+          max={230000}
+          size='small'
+          disableSwap
+          sx={{width: 'auto', mx: '4px', mt: 1}}
+        />
+        <Stack justifyContent='space-between' direction='row'>
+          <Typography variant="subtitle2">₹{fees[0]}</Typography>
+          <Typography variant="subtitle2">₹{calculateFees(fees[1])}</Typography>
+        </Stack>
+      </Stack>
+      <Divider />
     </>
   );
 

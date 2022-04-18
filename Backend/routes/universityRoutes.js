@@ -5,6 +5,30 @@ const {user, uni, comment} = require('../schemas/data');
 
 var categories = require('../filter')
 
+//var Filter = require('bad-words'),
+//    filter = new Filter();
+//filter.addWords('fuck', 'shit', 'shitty',);
+
+var BadLanguageFilter = require('bad-language-filter');
+var filter = new BadLanguageFilter();
+var badwords = require('../badwords.json').badwords;
+var TextFinder = require('../textfinder');
+
+function BadLanguageFilter() {
+	this.textfinder = new TextFinder(badwords);
+}
+
+// Check if any bad words is contained in content
+BadLanguageFilter.prototype.contains = function(content) {
+	return this.textfinder.contains(content);
+};
+
+var Filter = require('bad-words'),
+    filt = new Filter();
+
+
+
+
 router.get('/getUni', async(req, res) =>{
     const page = req.query.page
     const filters = JSON.parse(req.query.filters)
@@ -16,6 +40,9 @@ router.get('/getUni', async(req, res) =>{
 
     if(filters["University"].length === 0){
         filters["University"] = categories.University
+    }
+    if(filters["Courses"].length === 0){
+        filters["Courses"] = categories.Courses
     }
     if(filters["State"].length === 0){
         filters["State"] = categories.State
@@ -34,6 +61,8 @@ router.get('/getUni', async(req, res) =>{
             query = {
                 $text: {$search: search},
                 Cutoff_Round_Two: {$lte : marks},
+                Rating: {$lte: filters['rating'][1], $gte: filters['rating'][0]},
+                Average_Fees: {$lte: filters['fees'][1], $gte: filters['fees'][0]},
                 State : {$in: filters["State"]},
                 University : {$in: filters["University"]}
             }
@@ -58,9 +87,12 @@ router.get('/getUni', async(req, res) =>{
         }else{
             query = {
                 Cutoff_Round_Two: {$lte : marks},
+                Rating: {$lte: filters['rating'][1], $gte: filters['rating'][0]},
+                Average_Fees: {$lte: filters['fees'][1], $gte: filters['fees'][0]},
                 State : {$in: filters["State"]},
                 University : {$in: filters["University"]}
             }
+            console.log(filters["rating"][0], query)
 
             count = await uni.count(query)
 
@@ -116,9 +148,32 @@ router.post('/getSearch', async function (req, res){
     res.send(colleges)
 })
 
+function containsSpecialChars(str) {
+  const specialChars = /[`@#$%^*_+\[\]{};\\|<>\/]/;
+  return specialChars.test(str);
+}
+
 router.post('/comment', async function (req, res) {
-    let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {$push: {comments: req.body.commentbody }});
-    res.send(college);
+    let x = req.body.commentbody;
+
+    let xx = filt.clean(req.body.commentbody);
+
+    var wordCount = x.match(/(\w+)/g).length;
+    var sizex = x.length;
+
+
+    if (containsSpecialChars(xx))
+    {
+        res.status(400).send("Profanity used, please update the comment");
+    }
+    else if (wordCount < 7 || sizex < 15)
+    {
+                res.status(400).send("Need atleast 7 words and 15 characters for a genuine review, please update the comment");
+        }
+    else {
+        let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, { $push: { comments: req.body.commentbody } });
+        res.send(college);
+    }
 })
 
 router.post('/deletecomment', async function (req, res) {
@@ -127,6 +182,8 @@ router.post('/deletecomment', async function (req, res) {
     let univ = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, {comments: comments});
     res.send(univ);
 })
+
+
 
 router.post('/updateUni', async function (req, res) {
     await uni.findOneAndUpdate({ College_Name: req.body.College_Name },
@@ -145,7 +202,8 @@ router.post('/updateUni', async function (req, res) {
             Average_Fees: req.body.Average_Fees,
             Cutoff_Round_One: req.body.Cutoff_Round_One,
             Cutoff_Round_Two: req.body.Cutoff_Round_Two,
-            Images: req.body.Images
+            Images: req.body.Images,
+            Videos: req.body.Videos
         });
 
     res.send("updated");
