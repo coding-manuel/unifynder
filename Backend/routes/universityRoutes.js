@@ -34,6 +34,8 @@ router.get('/getUni', async(req, res) =>{
             query = {
                 $text: {$search: search},
                 Cutoff_Round_Two: {$lte : marks},
+                Rating: {$lte: filters['rating'][1], $gte: filters['rating'][0]},
+                Average_Fees: {$lte: filters['fees'][1], $gte: filters['fees'][0]},
                 State : {$in: filters["State"]},
                 University : {$in: filters["University"]}
             }
@@ -58,9 +60,12 @@ router.get('/getUni', async(req, res) =>{
         }else{
             query = {
                 Cutoff_Round_Two: {$lte : marks},
+                Rating: {$lte: filters['rating'][1], $gte: filters['rating'][0]},
+                Average_Fees: {$lte: filters['fees'][1], $gte: filters['fees'][0]},
                 State : {$in: filters["State"]},
                 University : {$in: filters["University"]}
             }
+            console.log(filters["rating"][0], query)
 
             count = await uni.count(query)
 
