@@ -155,10 +155,18 @@ router.post('/comment', async function (req, res) {
 
     let xx = filt.clean(req.body.commentbody);
 
+    var wordCount = x.match(/(\w+)/g).length;
+    var sizex = x.length;
+
+
     if (containsSpecialChars(xx))
     {
         res.status(400).send("Profanity used, please update the comment");
     }
+    else if (wordCount < 7 || sizex < 15)
+    {
+                res.status(400).send("Need atleast 7 words and 15 characters for a genuine review, please update the comment");
+        }
     else {
         let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, { $push: { comments: req.body.commentbody } });
         res.send(college);
