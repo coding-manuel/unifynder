@@ -8,7 +8,7 @@ var categories = require('../filter')
 //var Filter = require('bad-words'),
 //    filter = new Filter();
 //filter.addWords('fuck', 'shit', 'shitty',);
-    
+
 var BadLanguageFilter = require('bad-language-filter');
 var filter = new BadLanguageFilter();
 var badwords = require('../badwords.json').badwords;
@@ -152,23 +152,17 @@ function containsSpecialChars(str) {
 
 router.post('/comment', async function (req, res) {
     let x = req.body.commentbody;
-   
-    //if (x.includes(badwords)) {
-     //   res.send("profanity used, cant accept the comment");
-    //}
+
     let xx = filt.clean(req.body.commentbody);
-    
+
     if (containsSpecialChars(xx))
     {
-           res.send("profanity used, cant accept the comment");
-        }
+        res.status(400).send("Profanity used, please update the comment");
+    }
     else {
-
-        // else{
         let college = await uni.findOneAndUpdate({ College_Name: req.body.collegeName }, { $push: { comments: req.body.commentbody } });
         res.send(college);
     }
-    //}
 })
 
 router.post('/deletecomment', async function (req, res) {
