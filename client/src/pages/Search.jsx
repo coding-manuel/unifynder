@@ -22,7 +22,7 @@ export default function Search() {
   const [userData, setUserData] = useState({});
   const {user, setUser } = useContext(UserContext);
   const [eligible, setEligible] = useState(false);
-  const [filters, setFilters] = useState({University: [], State: [], Search: '', Fees: '', eligible: eligible, user: user, Sort: '', rating: [1,5], fees: [1,230000]});
+  const [filters, setFilters] = useState({University: [], State: [], Search: '', Courses: '', eligible: eligible, user: user, Sort: '', rating: [1,5], fees: [1,230000]});
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [uniData, setUniData] = useState([]);

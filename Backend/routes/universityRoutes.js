@@ -41,6 +41,9 @@ router.get('/getUni', async(req, res) =>{
     if(filters["University"].length === 0){
         filters["University"] = categories.University
     }
+    if(filters["Courses"].length === 0){
+        filters["Courses"] = categories.Courses
+    }
     if(filters["State"].length === 0){
         filters["State"] = categories.State
     }

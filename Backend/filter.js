@@ -65,6 +65,7 @@ const categories = {
         'Andaman and Nicobar Islands',
         'Dadra and Nagar Haveli',
         'MBA Collaboration with University of Warwick UK'
-    ]
+    ],
+    "Courses":["B.Tech","M.Tech","B.Sc","BA","MA","MBA","MBBS","Diploma","LLB", "B.Com"]
 }
 module.exports = categories
