@@ -140,6 +140,11 @@ router.post('/getSearch', async function (req, res){
     res.send(colleges)
 })
 
+function containsSpecialChars(str) {
+  const specialChars = /[`@#$%^*_+\[\]{};\\|<>\/]/;
+  return specialChars.test(str);
+}
+
 router.post('/comment', async function (req, res) {
     let x = req.body.commentbody;
    
@@ -147,9 +152,11 @@ router.post('/comment', async function (req, res) {
      //   res.send("profanity used, cant accept the comment");
     //}
     let xx = filt.clean(req.body.commentbody);
-    if (filt.clean(req.body.commentbody)) {
-        res.send("profanity used, cant accept the comment");
-    }
+    
+    if (containsSpecialChars(xx))
+    {
+           res.send("profanity used, cant accept the comment");
+        }
     else {
 
         // else{
