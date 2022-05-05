@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/coding-manuel/unifynder">
-    <img src="images/logo.jpg" alt="Logo" width="80" height="80">
+    <img src="images/logo.jpg" alt="Logo" width="auto" height="50">
   </a>
 
   <h3 align="center">Unifynder</h3>
@@ -17,20 +17,15 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src="images/home.jpg" alt="Logo" >
 
 We hate going through the same tedious work again and again, hence, we cleared this issue by implementing our own Locker, which serves as a secure place to store ones mark-sheets and other important documents which are essential for admission. So regardless of where you are, you can access them from our app which stores it in a secure folder over the cloud.
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
 
 ### Built With
 
 * [React.js](https://reactjs.org/)
 * [Node.js](https://nodejs.org/)
 * [MUI](https://mui.com/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -39,7 +34,3 @@ We hate going through the same tedious work again and again, hence, we cleared t
 - [ ] Feature 2
 - [ ] Feature 3
     - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
